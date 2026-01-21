@@ -1,0 +1,78 @@
+* { box-sizing: border-box; font-family: "Tahoma", sans-serif; }
+body { margin: 0; direction: rtl; overflow-x: hidden; }
+
+/* الخلفية واضحة 100% لتظهر دينا الحقيقية في المنتصف */
+.bg { 
+  background: url("assets/bg-main.png") center/cover no-repeat fixed; 
+  min-height: 100vh; 
+  display: flex; 
+  flex-direction: column;
+  align-items: center; 
+  justify-content: flex-start; 
+  padding-top: 15px;
+}
+
+.panel { 
+  background: transparent; 
+  width: 95%; 
+  max-width: 700px; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: center;
+  position: relative;
+}
+
+.header { 
+  background: #ff7fa2; 
+  color: #fff; 
+  padding: 8px 30px; 
+  border-radius: 20px; 
+  font-size: 20px; 
+  margin-bottom: 10px;
+}
+
+/* وزنية الفم: إزاحة دقيقة لليسار مع ميلان */
+.character-box { position: relative; width: 140px; margin-bottom: 5px; }
+.character-img { width: 100%; display: block; }
+
+.mouth-img { 
+  position: absolute; 
+  top: 51.5%; 
+  left: 41%; 
+  transform: translate(-50%, -50%) rotate(-6deg); 
+  width: 26px; 
+  z-index: 10;
+}
+
+/* إطار الفيديو الوردي: تم إنزاله لآخر الصفحة لإظهار وجه الخلفية */
+.video-frame-pink {
+  width: 100%;
+  max-width: 500px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.3);
+  border: 6px solid #ff7fa2; 
+  border-radius: 25px;
+  margin-top: 130px; /* دفع الفيديو للأسفل لكشف صورة الوجه في الخلفية */
+  box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+.video-box-wide { width: 100%; aspect-ratio: 16/9; background: #000; border-radius: 15px; overflow: hidden; }
+.video-box-wide iframe { width: 100%; height: 100%; border: none; }
+
+.stars { margin-top: 10px; font-size: 22px; color: #fff; text-shadow: 2px 2px 5px #000; font-weight: bold; }
+
+/* الصفحة الرئيسية: تفريغ المنتصف */
+.panel-body-main { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 20px; }
+.girl-main { width: 120px; order: 1; margin-left: 10px; }
+.surahs { 
+  display: grid; 
+  grid-template-columns: repeat(3, 1fr); 
+  gap: 8px; 
+  width: 48%; 
+  order: 2; 
+  max-height: 480px; 
+  overflow-y: auto; 
+}
+.surahs button { background: rgba(255, 216, 106, 0.95); border: 2px solid #fff; border-radius: 10px; padding: 10px 5px; font-size: 13px; font-weight: bold; cursor: pointer; color: #333; }
+
+.back { position: absolute; top: 0px; left: 10px; padding: 8px 20px; background: #ff7fa2; color: #fff; border-radius: 10px; border: none; cursor: pointer; font-weight: bold; z-index: 100; }
