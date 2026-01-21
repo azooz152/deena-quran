@@ -2,28 +2,55 @@
 <html lang="ar" dir="rtl">
 <head>
   <meta charset="UTF-8">
-  <title>السورة - دينا</title>
+  <title>استماع السور - دينا السهيمي</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg">
+  <button class="back" onclick="location.href='index.html'">رجوع</button>
+
   <div class="panel">
-    <button class="back" onclick="location.href='index.html'">رجوع</button>
-    <div id="surahName" class="header"></div>
-    
+    <div id="surahName" class="header">السورة</div>
+
     <div class="character-box">
-      <img src="assets/images/girl.png" class="character-img">
-      <img src="assets/images/mouth_closed.png" id="mouth" class="mouth-img">
+      <img src="https://azooz152.github.io/deena-quran/assets/images/girl.png" class="character-img">
+      <img src="https://azooz152.github.io/deena-quran/assets/images/mouth_closed.png" id="mouth" class="mouth-img">
     </div>
 
-    <div class="stars">⭐⭐ أحسنتِ يا بطلة</div>
+    <div class="stars">⭐⭐ أحسنتِ يا بطلة ⭐⭐</div>
 
     <div class="video-frame-pink">
-      <div class="video-box-wide">
-        <iframe src="https://archive.org/embed/watch-video-semsem-chanal-alminshawi----teacher-repeat-kids-high-quality?autoplay=1" allow="autoplay; fullscreen" allowfullscreen></iframe>
+      <div class="video-box-wide" id="videoContainer">
+        <iframe id="surahVideo" src="https://archive.org/embed/watch-video-semsem-chanal-alminshawi----teacher-repeat-kids-high-quality?autoplay=1&mute=0" allow="autoplay; fullscreen" allowfullscreen></iframe>
       </div>
     </div>
   </div>
+
   <script src="script.js"></script>
+  <script>
+    // برمجة اختيار الفيديو بناءً على اسم السورة المار في الرابط
+    const params = new URLSearchParams(window.location.search);
+    const surah = params.get('surah');
+    const surahNameElement = document.getElementById('surahName');
+    const videoFrame = document.getElementById('surahVideo');
+
+    if (surah) {
+      surahNameElement.textContent = surah;
+      // هنا يمكنك إضافة روابط مخصصة لكل سورة إذا أردت مستقبلاً
+    }
+
+    // محاولة إجبار التلفزيون على إخراج الصوت عند تحميل الصفحة
+    window.onload = function() {
+      const iframe = document.getElementById('surahVideo');
+      if (iframe) {
+        // إعادة تحميل الـ src لضمان تفعيل التشغيل التلقائي بالصوت
+        let currentSrc = iframe.src;
+        iframe.src = currentSrc;
+      }
+      
+      // توجيه التركيز (Focus) لزر الرجوع ليسهل استخدامه بالريموت
+      document.querySelector('.back').focus();
+    };
+  </script>
 </body>
 </html>
