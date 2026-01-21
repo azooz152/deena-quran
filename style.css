@@ -1,9 +1,10 @@
 * { box-sizing: border-box; font-family: "Tahoma", sans-serif; }
 body { margin: 0; direction: rtl; overflow-x: hidden; }
 
-/* الخلفية واضحة 100% لتظهر دينا الحقيقية في المنتصف */
+/* الخلفية: تم وضع الرابط الكامل لضمان ظهورها في التلفزيون */
 .bg { 
-  background: url("assets/bg-main.png") center/cover no-repeat fixed; 
+  background: url("https://azooz152.github.io/deena-quran/assets/images/girl.png") center/contain no-repeat fixed; 
+  background-color: #fce4ec; /* لون احتياطي في حال تأخر تحميل الصورة */
   min-height: 100vh; 
   display: flex; 
   flex-direction: column;
@@ -31,9 +32,9 @@ body { margin: 0; direction: rtl; overflow-x: hidden; }
   margin-bottom: 10px;
 }
 
-/* وزنية الفم: إزاحة دقيقة لليسار مع ميلان */
+/* وزنية الفم: حافظت على إزاحتك الدقيقة */
 .character-box { position: relative; width: 140px; margin-bottom: 5px; }
-.character-img { width: 100%; display: block; }
+.character-img { width: 100%; display: block; opacity: 0; } /* إخفاء الصورة المكررة لأنها موجودة في الخلفية */
 
 .mouth-img { 
   position: absolute; 
@@ -44,15 +45,15 @@ body { margin: 0; direction: rtl; overflow-x: hidden; }
   z-index: 10;
 }
 
-/* إطار الفيديو الوردي: تم إنزاله لآخر الصفحة لإظهار وجه الخلفية */
+/* إطار الفيديو: تم رفعه للأعلى (margin-top قليل) ليكون واضحاً في التلفزيون */
 .video-frame-pink {
   width: 100%;
-  max-width: 500px;
+  max-width: 600px; /* تكبير الفيديو قليلاً ليناسب الشاشة */
   padding: 12px;
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.5);
   border: 6px solid #ff7fa2; 
   border-radius: 25px;
-  margin-top: 130px; /* دفع الفيديو للأسفل لكشف صورة الوجه في الخلفية */
+  margin-top: 20px; /* رفعنا الفيديو للأعلى بدلاً من 130px */
   box-shadow: 0 8px 20px rgba(0,0,0,0.2);
 }
 
@@ -61,7 +62,7 @@ body { margin: 0; direction: rtl; overflow-x: hidden; }
 
 .stars { margin-top: 10px; font-size: 22px; color: #fff; text-shadow: 2px 2px 5px #000; font-weight: bold; }
 
-/* الصفحة الرئيسية: تفريغ المنتصف */
+/* الصفحة الرئيسية */
 .panel-body-main { display: flex; justify-content: space-between; align-items: flex-start; width: 100%; margin-top: 20px; }
 .girl-main { width: 120px; order: 1; margin-left: 10px; }
 .surahs { 
