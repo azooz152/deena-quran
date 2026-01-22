@@ -1,56 +1,131 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>استماع السور - دينا السهيمي</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دينا - المصحف المعلم</title>
+    <style>
+        /* إعدادات الشاشة الواحدة لشاشات هواوي */
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; font-family: 'Arial', sans-serif;
+            /* المسار المطلوب: في مجلد assets مباشرة */
+            background: url('assets/bg-main.png') no-repeat center center fixed;
+            background-size: cover;
+            background-color: #1a1a1a;
+        }
+
+        .container {
+            position: relative; width: 100vw; height: 100vh;
+            display: flex; flex-direction: column; align-items: center;
+        }
+
+        /* زر العودة الموزون */
+        .back-btn {
+            position: absolute; top: 20px; left: 20px;
+            padding: 10px 30px; background: #4db6ac;
+            border: 3px solid white; border-radius: 50px;
+            color: white; font-weight: bold; cursor: pointer; z-index: 100;
+        }
+
+        /* إطار الآية */
+        .ayah-box {
+            position: relative; margin-top: 30px;
+            width: 80%; background: white;
+            border: 6px solid #fbc02d; border-radius: 30px;
+            padding: 20px; z-index: 10; text-align: center;
+            box-shadow: 0 8px 0 #b8860b;
+        }
+
+        #ayahText { color: #263238; font-size: 2.5rem; font-weight: bold; }
+
+        /* ميزان الشخصية والشفاه 100% */
+        .character-zone {
+            position: absolute; bottom: 0;
+            width: 100%; height: 75vh;
+            display: flex; justify-content: center; align-items: flex-end;
+        }
+
+        .dina-wrapper { position: relative; height: 100%; }
+        #dinaImg { height: 100%; display: block; }
+
+        /* الوزن النهائي: زحف لليسار ونزول للأسفل */
+        #mouth {
+            position: absolute;
+            top: 51.5%;   /* نزول للأسفل */
+            left: 41.2%;  /* زحف لليسار */
+            transform: translate(-50%, -50%);
+            width: 78px; 
+            z-index: 5;
+        }
+    </style>
 </head>
-<body class="bg">
-  <button class="back" onclick="location.href='index.html'">رجوع</button>
+<body onclick="initDina()">
 
-  <div class="panel">
-    <div id="surahName" class="header">السورة</div>
+    <div class="container">
+        <button class="back-btn" onclick="history.back()">🏠 رجوع</button>
+        <div class="ayah-box"><div id="ayahText">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div></div>
 
-    <div class="character-box">
-      <img src="https://azooz152.github.io/deena-quran/assets/images/girl.png" class="character-img">
-      <img src="https://azooz152.github.io/deena-quran/assets/images/mouth_closed.png" id="mouth" class="mouth-img">
+        <div class="character-zone">
+            <div class="dina-wrapper">
+                <img src="assets/images/girl.png" id="dinaImg">
+                <img src="assets/images/mouth_closed.png" id="mouth">
+            </div>
+        </div>
     </div>
 
-    <div class="stars">⭐⭐ أحسنتِ يا بطلة ⭐⭐</div>
+    <audio id="audioPlayer" crossorigin="anonymous" loop></audio>
 
-    <div class="video-frame-pink">
-      <div class="video-box-wide" id="videoContainer">
-        <iframe id="surahVideo" src="https://archive.org/embed/watch-video-semsem-chanal-alminshawi----teacher-repeat-kids-high-quality?autoplay=1&mute=0" allow="autoplay; fullscreen" allowfullscreen></iframe>
-      </div>
-    </div>
-  </div>
+<script>
+    const audio = document.getElementById('audioPlayer');
+    const mouthImg = document.getElementById('mouth');
+    const textDisp = document.getElementById('ayahText');
 
-  <script src="script.js"></script>
-  <script>
-    // برمجة اختيار الفيديو بناءً على اسم السورة المار في الرابط
-    const params = new URLSearchParams(window.location.search);
-    const surah = params.get('surah');
-    const surahNameElement = document.getElementById('surahName');
-    const videoFrame = document.getElementById('surahVideo');
+    const sNum = localStorage.getItem('surah_num') || "001";
+    const sName = localStorage.getItem('surah_name') || "سورة الفاتحة";
+    audio.src = `https://server8.mp3quran.net/muhammad_siddeeq_al-minshawi/almusshaf_almuallim/${sNum.padStart(3, '0')}.mp3`;
 
-    if (surah) {
-      surahNameElement.textContent = surah;
-      // هنا يمكنك إضافة روابط مخصصة لكل سورة إذا أردت مستقبلاً
+    let started = false;
+
+    function initDina() {
+        if (!started) {
+            // الترحيب الذكي المتوافق مع هواوي (بنت)
+            const speech = new SpeechSynthesisUtterance(`أهلاً بكِ يا صديقتي المبدعة.. هيا لنقرأ سورة ${sName}`);
+            speech.lang = 'ar-SA';
+            speech.pitch = 1.6; // صوت بنت طفلة
+            speech.rate = 0.9;
+
+            window.speechSynthesis.speak(speech);
+            speech.onend = () => {
+                startSync();
+                audio.play();
+                textDisp.innerText = sName;
+            };
+            started = true;
+        }
     }
 
-    // محاولة إجبار التلفزيون على إخراج الصوت عند تحميل الصفحة
-    window.onload = function() {
-      const iframe = document.getElementById('surahVideo');
-      if (iframe) {
-        // إعادة تحميل الـ src لضمان تفعيل التشغيل التلقائي بالصوت
-        let currentSrc = iframe.src;
-        iframe.src = currentSrc;
-      }
-      
-      // توجيه التركيز (Focus) لزر الرجوع ليسهل استخدامه بالريموت
-      document.querySelector('.back').focus();
-    };
-  </script>
+    function startSync() {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = ctx.createAnalyser();
+        const src = ctx.createMediaElementSource(audio);
+        src.connect(analyser);
+        analyser.connect(ctx.destination);
+        analyser.fftSize = 256;
+        const data = new Uint8Array(analyser.frequencyBinCount);
+
+        function animate() {
+            if (!audio.paused) {
+                analyser.getByteFrequencyData(data);
+                let vol = data.reduce((a, b) => a + b) / data.length;
+                if (vol > 35) mouthImg.src = 'assets/images/mouth_open.png';
+                else if (vol > 15) mouthImg.src = 'assets/images/mouth_half.png';
+                else mouthImg.src = 'assets/images/mouth_closed.png';
+            }
+            requestAnimationFrame(animate);
+        }
+        animate();
+    }
+</script>
 </body>
 </html>
