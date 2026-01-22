@@ -5,14 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دينا - المصحف المعلم</title>
     <style>
-        /* إعدادات الشاشة الواحدة لشاشات هواوي */
+        /* --- إعدادات الصفحة الأساسية --- */
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; font-family: 'Arial', sans-serif;
-            /* المسار المطلوب: في مجلد assets مباشرة */
+            overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background: url('assets/bg-main.png') no-repeat center center fixed;
             background-size: cover;
-            background-color: #1a1a1a;
+            background-color: #1a1a1a; /* لون احتياطي */
         }
 
         .container {
@@ -20,111 +19,241 @@
             display: flex; flex-direction: column; align-items: center;
         }
 
-        /* زر العودة الموزون */
+        /* --- زر العودة --- */
         .back-btn {
             position: absolute; top: 20px; left: 20px;
-            padding: 10px 30px; background: #4db6ac;
+            padding: 10px 25px; background: #FF7043; /* لون برتقالي طفولي */
             border: 3px solid white; border-radius: 50px;
-            color: white; font-weight: bold; cursor: pointer; z-index: 100;
+            color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; z-index: 100;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
         }
 
-        /* إطار الآية */
+        /* --- إطار الآية --- */
         .ayah-box {
-            position: relative; margin-top: 30px;
-            width: 80%; background: white;
-            border: 6px solid #fbc02d; border-radius: 30px;
-            padding: 20px; z-index: 10; text-align: center;
-            box-shadow: 0 8px 0 #b8860b;
+            position: relative; margin-top: 80px; /* مسافة من الأعلى */
+            width: 85%; background: rgba(255, 255, 255, 0.95);
+            border: 6px solid #FFCA28; border-radius: 25px;
+            padding: 15px; z-index: 10; text-align: center;
+            box-shadow: 0 10px 0 #F57F17; /* ظل كرتوني */
         }
 
-        #ayahText { color: #263238; font-size: 2.5rem; font-weight: bold; }
+        #ayahText { 
+            color: #37474F; font-size: 2rem; 
+            font-weight: bold; line-height: 1.6;
+        }
 
-        /* ميزان الشخصية والشفاه 100% */
+        /* --- منطقة الشخصية (دينا) --- */
         .character-zone {
             position: absolute; bottom: 0;
-            width: 100%; height: 75vh;
+            width: 100%; height: 65vh; /* ارتفاع مناسب للشاشة */
             display: flex; justify-content: center; align-items: flex-end;
+            pointer-events: none; /* يسمح بالنقر من خلال المنطقة الفارغة */
         }
 
         .dina-wrapper { position: relative; height: 100%; }
-        #dinaImg { height: 100%; display: block; }
+        
+        #dinaImg { 
+            height: 100%; 
+            display: block; 
+            filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.3));
+        }
 
-        /* الوزن النهائي: زحف لليسار ونزول للأسفل */
+        /* --- إعدادات الفم (تحتاج ضبط دقيق حسب صورتك) --- */
         #mouth {
             position: absolute;
-            top: 51.5%;   /* نزول للأسفل */
-            left: 41.2%;  /* زحف لليسار */
+            /* القيم التقريبية بناءً على الصورة القياسية */
+            top: 51%;   
+            left: 41%;  
             transform: translate(-50%, -50%);
-            width: 78px; 
+            width: 18%; /* العرض كنسبة مئوية من حجم الصورة لضمان التوافق */
             z-index: 5;
         }
+
+        /* --- شاشة البدء (زر التشغيل الكبير) --- */
+        #startOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex; flex-direction: column;
+            justify-content: center; align-items: center;
+            z-index: 999;
+            backdrop-filter: blur(5px);
+            transition: opacity 0.5s ease;
+        }
+
+        .play-btn-circle {
+            width: 120px; height: 120px;
+            background: #4CAF50;
+            border: 5px solid white;
+            border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 30px #4CAF50;
+            animation: pulse 1.5s infinite;
+        }
+
+        .play-icon {
+            width: 0; height: 0;
+            border-top: 25px solid transparent;
+            border-bottom: 25px solid transparent;
+            border-right: 45px solid white; /* اتجاه المثلث للعربية */
+            margin-left: -10px; /* تصحيح بصري للمنتصف */
+        }
+
+        .start-text {
+            margin-top: 20px; color: white; font-size: 1.8rem; font-weight: bold;
+            text-shadow: 0 2px 4px black;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+            70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(76, 175, 80, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+
     </style>
 </head>
-<body onclick="initDina()">
+<body>
+
+    <div id="startOverlay" onclick="startApp()">
+        <div class="play-btn-circle">
+            <div class="play-icon"></div>
+        </div>
+        <div class="start-text">اضغط هنا للبدء يا بطل</div>
+    </div>
 
     <div class="container">
-        <button class="back-btn" onclick="history.back()">🏠 رجوع</button>
-        <div class="ayah-box"><div id="ayahText">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div></div>
+        <button class="back-btn" onclick="history.back()">🏠 خروج</button>
+        
+        <div class="ayah-box">
+            <div id="ayahText">... جاري التحميل</div>
+        </div>
         
         <div class="character-zone">
             <div class="dina-wrapper">
-                <img src="assets/images/girl.png" id="dinaImg">
-                <img src="assets/images/mouth_closed.png" id="mouth">
+                <img src="assets/images/girl.png" id="dinaImg" alt="شخصية دينا">
+                <img src="assets/images/mouth_closed.png" id="mouth" alt="الفم">
             </div>
         </div>
     </div>
 
-    <audio id="audioPlayer" crossorigin="anonymous" loop></audio>
+    <audio id="audioPlayer" crossorigin="anonymous"></audio>
 
 <script>
     const audio = document.getElementById('audioPlayer');
     const mouthImg = document.getElementById('mouth');
     const textDisp = document.getElementById('ayahText');
+    const overlay = document.getElementById('startOverlay');
 
+    // استرجاع البيانات من الذاكرة
+    // إذا لم توجد بيانات، نستخدم سورة الفاتحة افتراضياً
     const sNum = localStorage.getItem('surah_num') || "001";
     const sName = localStorage.getItem('surah_name') || "سورة الفاتحة";
-    audio.src = `https://server8.mp3quran.net/muhammad_siddeeq_al-minshawi/almusshaf_almuallim/${sNum.padStart(3, '0')}.mp3`;
 
-    let started = false;
+    // رابط المصحف المعلم للمنشاوي (الخادم 10 عادة أسرع وأكثر استقراراً)
+    // نستخدم padStart للتأكد من أن الرقم مثل 001
+    const surahID = sNum.toString().padStart(3, '0');
+    audio.src = `https://server10.mp3quran.net/minsh/al_mus7af_al_mo3lim/${surahID}.mp3`;
 
-    function initDina() {
-        if (!started) {
-            // الترحيب الذكي المتوافق مع هواوي (بنت)
-            const speech = new SpeechSynthesisUtterance(`أهلاً بكِ يا صديقتي المبدعة.. هيا لنقرأ سورة ${sName}`);
-            speech.lang = 'ar-SA';
-            speech.pitch = 1.6; // صوت بنت طفلة
-            speech.rate = 0.9;
+    let audioContext = null;
+    let analyser = null;
+    let dataArray = null;
+    let isSpeaking = false;
+
+    // دالة البدء التي تعمل عند ضغط الزر الكبير
+    function startApp() {
+        // 1. إخفاء الشاشة الترحيبية
+        overlay.style.opacity = '0';
+        setTimeout(() => overlay.style.display = 'none', 500);
+
+        // 2. تحديث النص
+        textDisp.innerText = sName;
+
+        // 3. تهيئة الصوت (مهم جداً لهواوي)
+        initAudioContext();
+
+        // 4. نطق الترحيب ثم تشغيل القرآن
+        playWelcomeSpeech();
+    }
+
+    function playWelcomeSpeech() {
+        // إيقاف أي صوت سابق
+        window.speechSynthesis.cancel();
+
+        const speech = new SpeechSynthesisUtterance(`هيا يا صديقتي، لنقرأ سوياً ${sName}`);
+        speech.lang = 'ar-SA'; 
+        speech.pitch = 1.2; // نبرة طفولية
+        speech.rate = 0.9;  // سرعة متوسطة
+        
+        // عند انتهاء الكلام، شغل القرآن
+        speech.onend = () => {
+            playQuran();
+        };
+
+        // محاولة تشغيل الترحيب (قد لا يعمل في بعض الأجهزة إذا لم تكن اللغة العربية مثبتة)
+        // لذا نضع خطة بديلة لتشغيل القرآن في حال حدث خطأ
+        speech.onerror = () => {
+            playQuran();
+        };
+
+        window.speechSynthesis.speak(speech);
+    }
+
+    function playQuran() {
+        // التأكد من أن الصوت جاهز للعمل
+        if (audioContext && audioContext.state === 'suspended') {
+            audioContext.resume();
+        }
+        
+        audio.play().then(() => {
+            animateMouth(); // تشغيل حركة الفم
+        }).catch(error => {
+            console.log("Auto-play was prevented: " + error);
+            textDisp.innerText = "اضغط مرة أخرى للتشغيل";
+        });
+    }
+
+    function initAudioContext() {
+        if (!audioContext) {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioContext = new AudioContext();
+            analyser = audioContext.createAnalyser();
             
-            window.speechSynthesis.speak(speech);
-            speech.onend = () => {
-                startSync();
-                audio.play();
-                textDisp.innerText = sName;
-            };
-            started = true;
+            const source = audioContext.createMediaElementSource(audio);
+            source.connect(analyser);
+            analyser.connect(audioContext.destination);
+            
+            analyser.fftSize = 256;
+            const bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
         }
     }
 
-    function startSync() {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
-        const analyser = ctx.createAnalyser();
-        const src = ctx.createMediaElementSource(audio);
-        src.connect(analyser);
-        analyser.connect(ctx.destination);
-        analyser.fftSize = 256;
-        const data = new Uint8Array(analyser.frequencyBinCount);
+    function animateMouth() {
+        if (!audio.paused && !audio.ended) {
+            requestAnimationFrame(animateMouth);
 
-        function animate() {
-            if (!audio.paused) {
-                analyser.getByteFrequencyData(data);
-                let vol = data.reduce((a, b) => a + b) / data.length;
-                if (vol > 35) mouthImg.src = 'assets/images/mouth_open.png';
-                else if (vol > 15) mouthImg.src = 'assets/images/mouth_half.png';
-                else mouthImg.src = 'assets/images/mouth_closed.png';
+            analyser.getByteFrequencyData(dataArray);
+            
+            // حساب متوسط حجم الصوت
+            let sum = 0;
+            for(let i = 0; i < dataArray.length; i++) {
+                sum += dataArray[i];
             }
-            requestAnimationFrame(animate);
+            let average = sum / dataArray.length;
+
+            // تغيير حركة الفم بناءً على قوة الصوت
+            // قمت بتعديل الحساسية لتناسب صوت المنشاوي
+            if (average > 30) { 
+                mouthImg.src = 'assets/images/mouth_open.png';
+            } else if (average > 10) {
+                mouthImg.src = 'assets/images/mouth_half.png';
+            } else {
+                mouthImg.src = 'assets/images/mouth_closed.png';
+            }
+        } else {
+            // إعادة الفم لوضع الإغلاق عند التوقف
+            mouthImg.src = 'assets/images/mouth_closed.png';
         }
-        animate();
     }
 </script>
 </body>
