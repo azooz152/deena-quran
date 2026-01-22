@@ -3,106 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دينا - المصحف المعلم</title>
+    <title>المصحف المعلم - دينا</title>
     <style>
-        /* إعدادات الصفحة */
+        /* --- إعدادات عامة --- */
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; font-family: Tahoma, sans-serif;
+            overflow: hidden; font-family: 'Segoe UI', Tahoma, sans-serif;
             background-color: #1a1a1a;
+            user-select: none; /* منع تحديد النص */
         }
 
-        /* صورة الخلفية */
+        /* الخلفية الموحدة */
         .bg-layer {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             background: url('assets/bg-main.png') no-repeat center center;
             background-size: cover;
-            z-index: 1; /* طبقة خلفية */
+            z-index: 1;
         }
 
-        /* الحاوية الرئيسية */
-        .container {
+        /* --- الشاشة 1: قائمة السور (Menu) --- */
+        #menuSection {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; align-items: center;
-            z-index: 10; /* طبقة المحتوى */
+            z-index: 20;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: rgba(0,0,0,0.6); /* تعتيم خفيف للخلفية */
+            transition: transform 0.5s ease;
         }
 
-        /* زر العودة */
+        .menu-title {
+            color: #FFCA28; font-size: 3rem; font-weight: bold; margin-bottom: 40px;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.5);
+        }
+
+        .surah-grid {
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;
+            width: 80%; max-width: 800px;
+        }
+
+        .surah-btn {
+            background: white; border: 4px solid #4DB6AC; border-radius: 20px;
+            padding: 20px; font-size: 1.8rem; font-weight: bold; color: #00695C;
+            cursor: pointer; transition: transform 0.2s, background 0.3s;
+            text-align: center; box-shadow: 0 5px 0 #004D40;
+        }
+
+        .surah-btn:active {
+            transform: scale(0.95) translateY(5px);
+            box-shadow: 0 0 0 transparent;
+        }
+
+        /* --- الشاشة 2: المشغل (Player) --- */
+        #playerSection {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; /* مبدئياً تحت القائمة */
+            display: none; /* مخفي في البداية */
+        }
+
+        /* زر العودة للقائمة */
         .back-btn {
             position: absolute; top: 30px; left: 30px;
-            padding: 15px 40px; background: #FF7043;
-            border: 4px solid white; border-radius: 50px;
-            color: white; font-size: 1.5rem; font-weight: bold; 
-            cursor: pointer; z-index: 100;
+            padding: 10px 30px; background: #FF7043;
+            border: 3px solid white; border-radius: 50px;
+            color: white; font-size: 1.2rem; font-weight: bold; 
+            cursor: pointer; z-index: 100; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        /* إطار الآية */
+        /* مربع الآية */
         .ayah-box {
-            position: relative; margin-top: 100px;
+            position: relative; margin: 100px auto 0;
             width: 80%; background: #fff;
             border: 6px solid #FFCA28; border-radius: 30px;
             padding: 20px; text-align: center;
-            box-shadow: 0 10px 0 #F57F17;
+            box-shadow: 0 8px 0 #F57F17; z-index: 50;
         }
 
-        #ayahText { 
-            color: #37474F; font-size: 2.5rem; font-weight: bold; 
-        }
+        #ayahText { color: #37474F; font-size: 2.5rem; font-weight: bold; }
 
-        /* منطقة الشخصية */
+        /* الشخصية والفم */
         .character-zone {
-            position: absolute; bottom: 0; left: 0;
-            width: 100%; height: 70%;
+            position: absolute; bottom: 0; left: 0; width: 100%; height: 75%;
             display: flex; justify-content: center; align-items: flex-end;
-            pointer-events: none;
+            pointer-events: none; z-index: 30;
         }
 
-        .dina-wrapper { 
-            position: relative; height: 100%; width: auto; 
-        }
-        
+        .dina-wrapper { position: relative; height: 100%; }
         #dinaImg { height: 100%; display: block; }
-
-        /* تعديل مكان الفم بناءً على صورتك */
+        
         #mouth {
             position: absolute;
-            top: 56%;  /* نزلت الفم للأسفل */
-            left: 41.5%; 
-            transform: translate(-50%, -50%);
+            top: 55.5%; left: 41.5%; transform: translate(-50%, -50%);
             width: 19%; 
-            z-index: 20;
-        }
-
-        /* --- شاشة البدء (الإجبارية) --- */
-        #overlay-screen {
-            position: fixed !important; /* فرض التثبيت */
-            top: 0; left: 0; width: 100%; height: 100%;
-            background-color: rgba(0,0,0,0.9); /* خلفية سوداء شبه معتمة */
-            z-index: 99999 !important; /* أعلى طبقة ممكنة */
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            cursor: pointer;
-        }
-
-        .play-btn {
-            width: 150px; height: 150px;
-            background: #4CAF50;
-            border: 8px solid #fff;
-            border-radius: 50%;
-            display: flex; justify-content: center; align-items: center;
-            box-shadow: 0 0 50px #4CAF50;
-        }
-
-        .play-triangle {
-            width: 0; height: 0;
-            border-top: 30px solid transparent;
-            border-bottom: 30px solid transparent;
-            border-right: 60px solid white; /* مثلث متجه لليسار */
-            margin-left: -15px;
-        }
-
-        .hint-text {
-            color: white; font-size: 2rem; margin-top: 30px; font-weight: bold;
         }
 
     </style>
@@ -111,15 +101,20 @@
 
     <div class="bg-layer"></div>
 
-    <div id="overlay-screen" onclick="startExperience()">
-        <div class="play-btn">
-            <div class="play-triangle"></div>
+    <div id="menuSection">
+        <div class="menu-title">اختر السورة يا بطل</div>
+        <div class="surah-grid">
+            <button class="surah-btn" onclick="openSurah('001', 'سورة الفاتحة')">الفاتحة</button>
+            <button class="surah-btn" onclick="openSurah('112', 'سورة الإخلاص')">الإخلاص</button>
+            <button class="surah-btn" onclick="openSurah('113', 'سورة الفلق')">الفلق</button>
+            <button class="surah-btn" onclick="openSurah('114', 'سورة الناس')">الناس</button>
+            <button class="surah-btn" onclick="openSurah('108', 'سورة الكوثر')">الكوثر</button>
+            <button class="surah-btn" onclick="openSurah('110', 'سورة النصر')">النصر</button>
         </div>
-        <div class="hint-text">اضغط هنا للتشغيل</div>
     </div>
 
-    <div class="container">
-        <button class="back-btn" onclick="history.back()">🏠 خروج</button>
+    <div id="playerSection">
+        <button class="back-btn" onclick="goBackToMenu()">🏠 القائمة</button>
         
         <div class="ayah-box">
             <div id="ayahText">...</div>
@@ -137,75 +132,84 @@
 
 <script>
     // المتغيرات
+    const menuSec = document.getElementById('menuSection');
+    const playerSec = document.getElementById('playerSection');
     const audio = document.getElementById('audioPlayer');
-    const mouthImg = document.getElementById('mouth');
     const textDisp = document.getElementById('ayahText');
-    const overlay = document.getElementById('overlay-screen');
-
-    // البيانات
-    const sNum = localStorage.getItem('surah_num') || "001";
-    const sName = localStorage.getItem('surah_name') || "سورة الفاتحة";
-    const surahID = sNum.toString().padStart(3, '0');
-
-    // تعيين الرابط والنص فوراً
-    textDisp.innerText = sName;
-    // رابط سريع جداً
-    audio.src = `https://server10.mp3quran.net/minsh/al_mus7af_al_mo3lim/${surahID}.mp3`;
+    const mouthImg = document.getElementById('mouth');
 
     let audioCtx, analyser, dataArray;
-    let isRunning = false;
+    let isInitialized = false;
 
-    // دالة التشغيل عند النقر
-    function startExperience() {
-        if (isRunning) return;
-        isRunning = true;
+    // --- الوظيفة الرئيسية: تشغيل السورة ---
+    function openSurah(id, name) {
+        // 1. تبديل الشاشات
+        menuSec.style.display = 'none'; // إخفاء القائمة
+        playerSec.style.display = 'block'; // إظهار المشغل
 
-        // 1. إخفاء الزر الكبير
-        overlay.style.display = 'none';
+        // 2. تحديث الاسم
+        textDisp.innerText = name;
 
-        // 2. تهيئة الصوت (الخطوة الأهم للشاشات)
-        try {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            audioCtx = new AudioContext();
-            analyser = audioCtx.createAnalyser();
-            const src = audioCtx.createMediaElementSource(audio);
-            src.connect(analyser);
-            analyser.connect(audioCtx.destination);
-            analyser.fftSize = 256;
-            dataArray = new Uint8Array(analyser.frequencyBinCount);
-            
-            // التأكد من أن السياق الصوتي يعمل
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
+        // 3. إعداد الصوت (المنشاوي المصحف المعلم)
+        // نستخدم التنسيق 001.mp3
+        const formattedId = id.toString().padStart(3, '0');
+        audio.src = `https://server10.mp3quran.net/minsh/al_mus7af_al_mo3lim/${formattedId}.mp3`;
+
+        // 4. تهيئة محلل الصوت (AudioContext)
+        // ** السر هنا **: المتصفح يسمح بهذا لأن المستخدم نقر للتو على زر السورة
+        if (!isInitialized) {
+            try {
+                const AudioContext = window.AudioContext || window.webkitAudioContext;
+                audioCtx = new AudioContext();
+                analyser = audioCtx.createAnalyser();
+                const source = audioCtx.createMediaElementSource(audio);
+                source.connect(analyser);
+                analyser.connect(audioCtx.destination);
+                analyser.fftSize = 256;
+                dataArray = new Uint8Array(analyser.frequencyBinCount);
+                isInitialized = true;
+            } catch(e) {
+                console.log("Audio Context Error: " + e);
             }
-        } catch (e) {
-            console.log("Audio Context Error: " + e);
         }
 
-        // 3. تشغيل الصوت مباشرة
+        // في حال كان الـ Context معلقاً
+        if (audioCtx && audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+
+        // 5. تشغيل الصوت وحركة الفم فوراً
         audio.play().then(() => {
-            animationLoop(); // بدء حركة الفم
-        }).catch((err) => {
-            textDisp.innerText = "تعذر تشغيل الصوت، حاول مرة أخرى";
+            animateMouth();
+        }).catch(err => {
+            console.error(err);
+            textDisp.innerText = "جاري التحميل...";
         });
     }
 
-    // حركة الفم
-    function animationLoop() {
-        requestAnimationFrame(animationLoop);
+    // --- وظيفة الرجوع للقائمة ---
+    function goBackToMenu() {
+        audio.pause(); // إيقاف الصوت
+        audio.currentTime = 0; // إعادة للبداية
+        mouthImg.src = 'assets/images/mouth_closed.png'; // إغلاق الفم
         
-        if (analyser && !audio.paused) {
+        playerSec.style.display = 'none'; // إخفاء المشغل
+        menuSec.style.display = 'flex'; // إظهار القائمة
+    }
+
+    // --- وظيفة تحريك الفم (Lip Sync) ---
+    function animateMouth() {
+        if (!audio.paused && !audio.ended && analyser) {
+            requestAnimationFrame(animateMouth);
             analyser.getByteFrequencyData(dataArray);
             
             let sum = 0;
-            for(let i = 0; i < dataArray.length; i++) {
-                sum += dataArray[i];
-            }
+            for(let i = 0; i < dataArray.length; i++) sum += dataArray[i];
             let vol = sum / dataArray.length;
 
-            // حساسية الفم
-            if (vol > 25) mouthImg.src = 'assets/images/mouth_open.png';
-            else if (vol > 10) mouthImg.src = 'assets/images/mouth_half.png';
+            // حساسية حركة الفم
+            if (vol > 20) mouthImg.src = 'assets/images/mouth_open.png';
+            else if (vol > 8) mouthImg.src = 'assets/images/mouth_half.png';
             else mouthImg.src = 'assets/images/mouth_closed.png';
         } else {
             mouthImg.src = 'assets/images/mouth_closed.png';
