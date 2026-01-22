@@ -1,71 +1,69 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <title>قرآن دينا - الصفحة الرئيسية</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قرآن دينا السهيمي - الرئيسية</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; font-family: 'Cairo', sans-serif;
+            /* تم تعديل المسار ليكون داخل مجلد assets مباشرة */
+            background: url('assets/bg-main.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* حاوية الأزرار السفليّة (مثل صورتك تماماً) */
+        .navigation-bar {
+            position: absolute;
+            bottom: 50px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .nav-item {
+            width: 160px; height: 160px;
+            border-radius: 25px; border: 5px solid white;
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+
+        .nav-item:focus {
+            transform: scale(1.15);
+            border-color: #fffb00;
+            outline: none;
+        }
+        
+        .purple { background-color: #9b59b6; }
+        .green  { background-color: #2ecc71; }
+        .yellow { background-color: #f1c40f; }
+        .orange { background-color: #e67e22; }
+    </style>
 </head>
-<body class="bg-main-screen">
-  <div class="panel">
-    <div class="header">مصحف دينا السهيمي</div>
-    
-    <div class="panel-body-main">
-      <img src="https://azooz152.github.io/deena-quran/assets/images/girl.png" class="girl-main">
-      
-      <div class="surahs" id="surah-list">
-        <button onclick="goToSurah('الناس')">الناس</button>
-        <button onclick="goToSurah('الفلق')">الفلق</button>
-        <button onclick="goToSurah('الإخلاص')">الإخلاص</button>
-        <button onclick="goToSurah('المسد')">المسد</button>
-        <button onclick="goToSurah('النصر')">النصر</button>
-        <button onclick="goToSurah('الكافرون')">الكافرون</button>
-        <button onclick="goToSurah('الكوثر')">الكوثر</button>
-        <button onclick="goToSurah('الماعون')">الماعون</button>
-        <button onclick="goToSurah('قريش')">قريش</button>
-        <button onclick="goToSurah('الفيل')">الفيل</button>
-        <button onclick="goToSurah('الهمزة')">الهمزة</button>
-        <button onclick="goToSurah('العصر')">العصر</button>
-        <button onclick="goToSurah('التكاثر')">التكاثر</button>
-        <button onclick="goToSurah('القارعة')">القارعة</button>
-        <button onclick="goToSurah('العاديات')">العاديات</button>
-        <button onclick="goToSurah('الزلزلة')">الزلزلة</button>
-        <button onclick="goToSurah('البينة')">البينة</button>
-        <button onclick="goToSurah('القدر')">القدر</button>
-        <button onclick="goToSurah('العلق')">العلق</button>
-        <button onclick="goToSurah('التين')">التين</button>
-        <button onclick="goToSurah('الشرح')">الشرح</button>
-        <button onclick="goToSurah('الضحى')">الضحى</button>
-        <button onclick="goToSurah('الليل')">الليل</button>
-        <button onclick="goToSurah('الشمس')">الشمس</button>
-        <button onclick="goToSurah('البلد')">البلد</button>
-        <button onclick="goToSurah('الفجر')">الفجر</button>
-        <button onclick="goToSurah('الغاشية')">الغاشية</button>
-        <button onclick="goToSurah('الأعلى')">الأعلى</button>
-        <button onclick="goToSurah('الطارق')">الطارق</button>
-        <button onclick="goToSurah('البروج')">البروج</button>
-        <button onclick="goToSurah('الانشقاق')">الانشقاق</button>
-        <button onclick="goToSurah('المطففين')">المطففين</button>
-        <button onclick="goToSurah('الانفطار')">الانفطار</button>
-        <button onclick="goToSurah('التكوير')">التكوير</button>
-        <button onclick="goToSurah('عبس')">عبس</button>
-        <button onclick="goToSurah('النازعات')">النازعات</button>
-        <button onclick="goToSurah('النبأ')">النبأ</button>
-      </div>
+<body>
+
+    <div class="navigation-bar">
+        <div class="nav-item purple" tabindex="1" onclick="location.href='recordings.html'">
+            <span style="font-size:3rem">🎙️</span>
+            <span style="color:white; font-weight:bold">تسجيلاتي</span>
+        </div>
+        <div class="nav-item green" tabindex="2" onclick="location.href='surah_list.html'">
+            <span style="font-size:3rem">📖</span>
+            <span style="color:white; font-weight:bold">جزء عم</span>
+        </div>
+        <div class="nav-item yellow" tabindex="3" onclick="location.href='azkar.html'">
+            <span style="font-size:3rem">🧘</span>
+            <span style="color:white; font-weight:bold">أذكار</span>
+        </div>
+        <div class="nav-item orange" tabindex="4" onclick="location.href='rewards.html'">
+            <span style="font-size:3rem">🏆</span>
+            <span style="color:white; font-weight:bold">مكافآتي</span>
+        </div>
     </div>
-  </div>
 
-  <script>
-    // وظيفة الانتقال للسورة عند الضغط بالريموت
-    function goToSurah(name) {
-      window.location.href = `surah.html?surah=${encodeURIComponent(name)}`;
-    }
-
-    // تجربة التركيز التلقائي لأول زر ليسهل استخدام الريموت فور فتح التطبيق
-    window.onload = function() {
-      const firstButton = document.querySelector('.surahs button');
-      if (firstButton) firstButton.focus();
-    };
-  </script>
 </body>
 </html>
