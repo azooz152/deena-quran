@@ -65,7 +65,7 @@
     <div class="container">
         <button class="back-btn" onclick="history.back()">🏠 رجوع</button>
         <div class="ayah-box"><div id="ayahText">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div></div>
-
+        
         <div class="character-zone">
             <div class="dina-wrapper">
                 <img src="assets/images/girl.png" id="dinaImg">
@@ -94,7 +94,7 @@
             speech.lang = 'ar-SA';
             speech.pitch = 1.6; // صوت بنت طفلة
             speech.rate = 0.9;
-
+            
             window.speechSynthesis.speak(speech);
             speech.onend = () => {
                 startSync();
