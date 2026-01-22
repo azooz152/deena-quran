@@ -5,133 +5,130 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>دينا - المصحف المعلم</title>
     <style>
-        /* --- إعدادات الصفحة الأساسية --- */
+        /* إعدادات الصفحة */
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
-            overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: url('assets/bg-main.png') no-repeat center center fixed;
+            overflow: hidden; font-family: Tahoma, sans-serif;
+            background-color: #1a1a1a;
+        }
+
+        /* صورة الخلفية */
+        .bg-layer {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('assets/bg-main.png') no-repeat center center;
             background-size: cover;
-            background-color: #1a1a1a; /* لون احتياطي */
+            z-index: 1; /* طبقة خلفية */
         }
 
+        /* الحاوية الرئيسية */
         .container {
-            position: relative; width: 100vw; height: 100vh;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; flex-direction: column; align-items: center;
+            z-index: 10; /* طبقة المحتوى */
         }
 
-        /* --- زر العودة --- */
+        /* زر العودة */
         .back-btn {
-            position: absolute; top: 20px; left: 20px;
-            padding: 10px 25px; background: #FF7043; /* لون برتقالي طفولي */
-            border: 3px solid white; border-radius: 50px;
-            color: white; font-size: 1.2rem; font-weight: bold; cursor: pointer; z-index: 100;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            position: absolute; top: 30px; left: 30px;
+            padding: 15px 40px; background: #FF7043;
+            border: 4px solid white; border-radius: 50px;
+            color: white; font-size: 1.5rem; font-weight: bold; 
+            cursor: pointer; z-index: 100;
         }
 
-        /* --- إطار الآية --- */
+        /* إطار الآية */
         .ayah-box {
-            position: relative; margin-top: 80px; /* مسافة من الأعلى */
-            width: 85%; background: rgba(255, 255, 255, 0.95);
-            border: 6px solid #FFCA28; border-radius: 25px;
-            padding: 15px; z-index: 10; text-align: center;
-            box-shadow: 0 10px 0 #F57F17; /* ظل كرتوني */
+            position: relative; margin-top: 100px;
+            width: 80%; background: #fff;
+            border: 6px solid #FFCA28; border-radius: 30px;
+            padding: 20px; text-align: center;
+            box-shadow: 0 10px 0 #F57F17;
         }
 
         #ayahText { 
-            color: #37474F; font-size: 2rem; 
-            font-weight: bold; line-height: 1.6;
+            color: #37474F; font-size: 2.5rem; font-weight: bold; 
         }
 
-        /* --- منطقة الشخصية (دينا) --- */
+        /* منطقة الشخصية */
         .character-zone {
-            position: absolute; bottom: 0;
-            width: 100%; height: 65vh; /* ارتفاع مناسب للشاشة */
+            position: absolute; bottom: 0; left: 0;
+            width: 100%; height: 70%;
             display: flex; justify-content: center; align-items: flex-end;
-            pointer-events: none; /* يسمح بالنقر من خلال المنطقة الفارغة */
+            pointer-events: none;
         }
 
-        .dina-wrapper { position: relative; height: 100%; }
+        .dina-wrapper { 
+            position: relative; height: 100%; width: auto; 
+        }
         
-        #dinaImg { 
-            height: 100%; 
-            display: block; 
-            filter: drop-shadow(0 -5px 15px rgba(0,0,0,0.3));
-        }
+        #dinaImg { height: 100%; display: block; }
 
-        /* --- إعدادات الفم (تحتاج ضبط دقيق حسب صورتك) --- */
+        /* تعديل مكان الفم بناءً على صورتك */
         #mouth {
             position: absolute;
-            /* القيم التقريبية بناءً على الصورة القياسية */
-            top: 51%;   
-            left: 41%;  
+            top: 56%;  /* نزلت الفم للأسفل */
+            left: 41.5%; 
             transform: translate(-50%, -50%);
-            width: 18%; /* العرض كنسبة مئوية من حجم الصورة لضمان التوافق */
-            z-index: 5;
+            width: 19%; 
+            z-index: 20;
         }
 
-        /* --- شاشة البدء (زر التشغيل الكبير) --- */
-        #startOverlay {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+        /* --- شاشة البدء (الإجبارية) --- */
+        #overlay-screen {
+            position: fixed !important; /* فرض التثبيت */
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0,0,0,0.9); /* خلفية سوداء شبه معتمة */
+            z-index: 99999 !important; /* أعلى طبقة ممكنة */
             display: flex; flex-direction: column;
             justify-content: center; align-items: center;
-            z-index: 999;
-            backdrop-filter: blur(5px);
-            transition: opacity 0.5s ease;
+            cursor: pointer;
         }
 
-        .play-btn-circle {
-            width: 120px; height: 120px;
+        .play-btn {
+            width: 150px; height: 150px;
             background: #4CAF50;
-            border: 5px solid white;
+            border: 8px solid #fff;
             border-radius: 50%;
             display: flex; justify-content: center; align-items: center;
-            cursor: pointer;
-            box-shadow: 0 0 30px #4CAF50;
-            animation: pulse 1.5s infinite;
+            box-shadow: 0 0 50px #4CAF50;
         }
 
-        .play-icon {
+        .play-triangle {
             width: 0; height: 0;
-            border-top: 25px solid transparent;
-            border-bottom: 25px solid transparent;
-            border-right: 45px solid white; /* اتجاه المثلث للعربية */
-            margin-left: -10px; /* تصحيح بصري للمنتصف */
+            border-top: 30px solid transparent;
+            border-bottom: 30px solid transparent;
+            border-right: 60px solid white; /* مثلث متجه لليسار */
+            margin-left: -15px;
         }
 
-        .start-text {
-            margin-top: 20px; color: white; font-size: 1.8rem; font-weight: bold;
-            text-shadow: 0 2px 4px black;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
-            70% { transform: scale(1.1); box-shadow: 0 0 0 20px rgba(76, 175, 80, 0); }
-            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        .hint-text {
+            color: white; font-size: 2rem; margin-top: 30px; font-weight: bold;
         }
 
     </style>
 </head>
 <body>
 
-    <div id="startOverlay" onclick="startApp()">
-        <div class="play-btn-circle">
-            <div class="play-icon"></div>
+    <div class="bg-layer"></div>
+
+    <div id="overlay-screen" onclick="startExperience()">
+        <div class="play-btn">
+            <div class="play-triangle"></div>
         </div>
-        <div class="start-text">اضغط هنا للبدء يا بطل</div>
+        <div class="hint-text">اضغط هنا للتشغيل</div>
     </div>
 
     <div class="container">
         <button class="back-btn" onclick="history.back()">🏠 خروج</button>
         
         <div class="ayah-box">
-            <div id="ayahText">... جاري التحميل</div>
+            <div id="ayahText">...</div>
         </div>
         
         <div class="character-zone">
             <div class="dina-wrapper">
-                <img src="assets/images/girl.png" id="dinaImg" alt="شخصية دينا">
-                <img src="assets/images/mouth_closed.png" id="mouth" alt="الفم">
+                <img src="assets/images/girl.png" id="dinaImg">
+                <img src="assets/images/mouth_closed.png" id="mouth">
             </div>
         </div>
     </div>
@@ -139,119 +136,78 @@
     <audio id="audioPlayer" crossorigin="anonymous"></audio>
 
 <script>
+    // المتغيرات
     const audio = document.getElementById('audioPlayer');
     const mouthImg = document.getElementById('mouth');
     const textDisp = document.getElementById('ayahText');
-    const overlay = document.getElementById('startOverlay');
+    const overlay = document.getElementById('overlay-screen');
 
-    // استرجاع البيانات من الذاكرة
-    // إذا لم توجد بيانات، نستخدم سورة الفاتحة افتراضياً
+    // البيانات
     const sNum = localStorage.getItem('surah_num') || "001";
     const sName = localStorage.getItem('surah_name') || "سورة الفاتحة";
-
-    // رابط المصحف المعلم للمنشاوي (الخادم 10 عادة أسرع وأكثر استقراراً)
-    // نستخدم padStart للتأكد من أن الرقم مثل 001
     const surahID = sNum.toString().padStart(3, '0');
+
+    // تعيين الرابط والنص فوراً
+    textDisp.innerText = sName;
+    // رابط سريع جداً
     audio.src = `https://server10.mp3quran.net/minsh/al_mus7af_al_mo3lim/${surahID}.mp3`;
 
-    let audioContext = null;
-    let analyser = null;
-    let dataArray = null;
-    let isSpeaking = false;
+    let audioCtx, analyser, dataArray;
+    let isRunning = false;
 
-    // دالة البدء التي تعمل عند ضغط الزر الكبير
-    function startApp() {
-        // 1. إخفاء الشاشة الترحيبية
-        overlay.style.opacity = '0';
-        setTimeout(() => overlay.style.display = 'none', 500);
+    // دالة التشغيل عند النقر
+    function startExperience() {
+        if (isRunning) return;
+        isRunning = true;
 
-        // 2. تحديث النص
-        textDisp.innerText = sName;
+        // 1. إخفاء الزر الكبير
+        overlay.style.display = 'none';
 
-        // 3. تهيئة الصوت (مهم جداً لهواوي)
-        initAudioContext();
-
-        // 4. نطق الترحيب ثم تشغيل القرآن
-        playWelcomeSpeech();
-    }
-
-    function playWelcomeSpeech() {
-        // إيقاف أي صوت سابق
-        window.speechSynthesis.cancel();
-
-        const speech = new SpeechSynthesisUtterance(`هيا يا صديقتي، لنقرأ سوياً ${sName}`);
-        speech.lang = 'ar-SA'; 
-        speech.pitch = 1.2; // نبرة طفولية
-        speech.rate = 0.9;  // سرعة متوسطة
-        
-        // عند انتهاء الكلام، شغل القرآن
-        speech.onend = () => {
-            playQuran();
-        };
-
-        // محاولة تشغيل الترحيب (قد لا يعمل في بعض الأجهزة إذا لم تكن اللغة العربية مثبتة)
-        // لذا نضع خطة بديلة لتشغيل القرآن في حال حدث خطأ
-        speech.onerror = () => {
-            playQuran();
-        };
-
-        window.speechSynthesis.speak(speech);
-    }
-
-    function playQuran() {
-        // التأكد من أن الصوت جاهز للعمل
-        if (audioContext && audioContext.state === 'suspended') {
-            audioContext.resume();
+        // 2. تهيئة الصوت (الخطوة الأهم للشاشات)
+        try {
+            const AudioContext = window.AudioContext || window.webkitAudioContext;
+            audioCtx = new AudioContext();
+            analyser = audioCtx.createAnalyser();
+            const src = audioCtx.createMediaElementSource(audio);
+            src.connect(analyser);
+            analyser.connect(audioCtx.destination);
+            analyser.fftSize = 256;
+            dataArray = new Uint8Array(analyser.frequencyBinCount);
+            
+            // التأكد من أن السياق الصوتي يعمل
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        } catch (e) {
+            console.log("Audio Context Error: " + e);
         }
-        
+
+        // 3. تشغيل الصوت مباشرة
         audio.play().then(() => {
-            animateMouth(); // تشغيل حركة الفم
-        }).catch(error => {
-            console.log("Auto-play was prevented: " + error);
-            textDisp.innerText = "اضغط مرة أخرى للتشغيل";
+            animationLoop(); // بدء حركة الفم
+        }).catch((err) => {
+            textDisp.innerText = "تعذر تشغيل الصوت، حاول مرة أخرى";
         });
     }
 
-    function initAudioContext() {
-        if (!audioContext) {
-            const AudioContext = window.AudioContext || window.webkitAudioContext;
-            audioContext = new AudioContext();
-            analyser = audioContext.createAnalyser();
-            
-            const source = audioContext.createMediaElementSource(audio);
-            source.connect(analyser);
-            analyser.connect(audioContext.destination);
-            
-            analyser.fftSize = 256;
-            const bufferLength = analyser.frequencyBinCount;
-            dataArray = new Uint8Array(bufferLength);
-        }
-    }
-
-    function animateMouth() {
-        if (!audio.paused && !audio.ended) {
-            requestAnimationFrame(animateMouth);
-
+    // حركة الفم
+    function animationLoop() {
+        requestAnimationFrame(animationLoop);
+        
+        if (analyser && !audio.paused) {
             analyser.getByteFrequencyData(dataArray);
             
-            // حساب متوسط حجم الصوت
             let sum = 0;
             for(let i = 0; i < dataArray.length; i++) {
                 sum += dataArray[i];
             }
-            let average = sum / dataArray.length;
+            let vol = sum / dataArray.length;
 
-            // تغيير حركة الفم بناءً على قوة الصوت
-            // قمت بتعديل الحساسية لتناسب صوت المنشاوي
-            if (average > 30) { 
-                mouthImg.src = 'assets/images/mouth_open.png';
-            } else if (average > 10) {
-                mouthImg.src = 'assets/images/mouth_half.png';
-            } else {
-                mouthImg.src = 'assets/images/mouth_closed.png';
-            }
+            // حساسية الفم
+            if (vol > 25) mouthImg.src = 'assets/images/mouth_open.png';
+            else if (vol > 10) mouthImg.src = 'assets/images/mouth_half.png';
+            else mouthImg.src = 'assets/images/mouth_closed.png';
         } else {
-            // إعادة الفم لوضع الإغلاق عند التوقف
             mouthImg.src = 'assets/images/mouth_closed.png';
         }
     }
