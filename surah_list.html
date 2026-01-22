@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>قائمة السور - دينا</title>
+    <style>
+        body, html {
+            margin: 0; padding: 0; width: 100%; height: 100%;
+            overflow: hidden; font-family: 'Arial', sans-serif;
+            /* الخلفية في مجلد assets مباشرة كما طلبت */
+            background: url('assets/bg-main.png') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        .main-container {
+            width: 100vw; height: 100vh;
+            display: flex; flex-direction: column;
+            align-items: center; justify-content: flex-start;
+            background: rgba(0, 0, 0, 0.3); /* طبقة داكنة خفيفة لبروز الأزرار */
+        }
+
+        .header {
+            width: 100%; padding: 15px 40px;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+
+        .back-btn {
+            padding: 8px 25px; background: #4db6ac;
+            border: 3px solid white; border-radius: 50px;
+            color: white; font-weight: bold; cursor: pointer;
+        }
+        .back-btn:focus { background: #ff5252; transform: scale(1.1); outline: none; }
+
+        .title { color: white; font-size: 1.8rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.5); }
+
+        /* حاوية السور: موزعة لملء الشاشة بدون تمرير */
+        .surah-grid {
+            display: grid;
+            /* 8 أعمدة لضمان استيعاب السور في شاشة واحدة */
+            grid-template-columns: repeat(8, 1fr); 
+            grid-template-rows: repeat(5, 1fr);
+            gap: 8px;
+            width: 95%;
+            height: 80vh; /* استغلال أغلب مساحة الطول */
+            padding: 10px;
+        }
+
+        .surah-item {
+            background: rgba(255, 255, 255, 0.9);
+            border: 3px solid #fbc02d;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            font-size: 1rem;
+            font-weight: bold;
+            color: #263238;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        /* تأثير الريموت (Focus) */
+        .surah-item:focus {
+            background: #fbc02d;
+            color: white;
+            transform: scale(1.1);
+            border-color: white;
+            outline: none;
+            box-shadow: 0 0 15px #fff;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="header">
+            <button class="back-btn" onclick="history.back()" tabindex="1">🏠 رجوع</button>
+            <div class="title">جزء عم - المصحف المعلم</div>
+        </div>
+
+        <div class="surah-grid" id="gridContainer">
+            </div>
+    </div>
+
+<script>
+    const surahs = [
+        {id: "078", name: "النبأ"}, {id: "079", name: "النازعات"}, {id: "080", name: "عبس"},
+        {id: "081", name: "التكوير"}, {id: "082", name: "الانفطار"}, {id: "083", name: "المطففين"},
+        {id: "084", name: "الانشقاق"}, {id: "085", name: "البروج"}, {id: "086", name: "الطارق"},
+        {id: "087", name: "الأعلى"}, {id: "088", name: "الغاشية"}, {id: "089", name: "الفجر"},
+        {id: "090", name: "البلد"}, {id: "091", name: "الشمس"}, {id: "092", name: "الليل"},
+        {id: "093", name: "الضحى"}, {id: "094", name: "الشرح"}, {id: "095", name: "التين"},
+        {id: "096", name: "العلق"}, {id: "097", name: "القدر"}, {id: "098", name: "البينة"},
+        {id: "099", name: "الزلزلة"}, {id: "100", name: "العاديات"}, {id: "101", name: "القارعة"},
+        {id: "102", name: "التكاثر"}, {id: "103", name: "العصر"}, {id: "104", name: "الهمزة"},
+        {id: "105", name: "الفيل"}, {id: "106", name: "قريش"}, {id: "107", name: "الماعون"},
+        {id: "108", name: "الكوثر"}, {id: "109", name: "الكافرون"}, {id: "110", name: "النصر"},
+        {id: "111", name: "المسد"}, {id: "112", name: "الإخلاص"}, {id: "113", name: "الفلق"}, {id: "114", name: "الناس"}
+    ];
+
+    function buildMenu() {
+        const container = document.getElementById('gridContainer');
+        surahs.forEach((s, index) => {
+            const div = document.createElement('div');
+            div.className = 'surah-item';
+            div.tabIndex = index + 2; // ترتيب التنقل بالريموت
+            div.innerText = s.name;
+            div.onclick = () => {
+                localStorage.setItem('surah_num', s.id);
+                localStorage.setItem('surah_name', s.name);
+                location.href = 'surah.html';
+            };
+            container.appendChild(div);
+        });
+    }
+
+    window.onload = buildMenu;
+</script>
+</body>
+</html>
