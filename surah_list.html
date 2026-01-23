@@ -1,221 +1,374 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>تلاوة السورة</title>
+    <title>تطبيق دينا لتعليم القرآن</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;900&family=Amiri:wght@700&display=swap" rel="stylesheet">
     <style>
+        /* --- 1. الأساسيات والخلفية الساحرة --- */
+        * { box-sizing: border-box; user-select: none; }
         body {
-            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            margin: 0;
+            padding: 0;
             height: 100vh;
             overflow: hidden;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-family: 'Tahoma', sans-serif;
-            margin: 0;
+            font-family: 'Cairo', sans-serif;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
         }
 
-        .container-glass {
-            width: 90%;
-            height: 90vh;
-            background: rgba(255, 255, 255, 0.3);
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            backdrop-filter: blur(10px);
-            border-radius: 30px;
-            border: 1px solid rgba(255, 255, 255, 0.18);
+        /* خلفية دينا المدمجة */
+        .dina-bg {
+            position: absolute;
+            bottom: 0;
+            left: 5%;
+            height: 70vh;
+            width: auto;
+            opacity: 0.15; /* شفافة لتندمج مع الخلفية */
+            z-index: 0;
+            pointer-events: none;
+            filter: grayscale(20%) drop-shadow(0 0 10px #fff);
+        }
+
+        /* تأثير البالونات الطائرة */
+        .balloon {
+            position: absolute;
+            bottom: -100px;
+            opacity: 0.6;
+            animation: floatUp 15s linear infinite;
+            z-index: 1;
+        }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.6; }
+            100% { transform: translateY(-120vh) rotate(20deg); opacity: 0; }
+        }
+
+        /* --- 2. شاشة القائمة (List View) --- */
+        #listView {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
             display: flex;
             flex-direction: column;
             align-items: center;
-            position: relative;
+            z-index: 10;
+            transition: transform 0.5s ease;
         }
 
-        /* زر الرجوع */
-        .back-btn {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: #ff4081;
-            color: white;
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.2em;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            z-index: 100;
-        }
-
-        /* تنسيق الشخصية الكرتونية */
-        .character-container {
-            margin-top: 20px;
-            position: relative;
-            width: 200px;
-            height: 200px;
-        }
-
-        .character-img {
-            width: 100%;
-            height: auto;
-            border-radius: 50%;
-            border: 5px solid #fff;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-        }
-
-        /* حركة الفم */
-        .mouth {
-            position: absolute;
-            bottom: 45px; /* تحتاج ضبط حسب صورتك */
-            left: 50%;
-            transform: translateX(-50%);
-            width: 30px;
-            height: 10px;
-            background: #5a3030;
-            border-radius: 50%;
-            transition: height 0.1s;
-        }
-
-        /* اسم السورة */
-        .surah-title {
+        .header-title {
             font-size: 3em;
             color: #fff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            margin: 10px 0;
+            text-shadow: 0 4px 10px rgba(0,0,0,0.2);
+            margin: 20px 0;
+            font-weight: 900;
+            z-index: 20;
+            background: rgba(255,255,255,0.2);
+            padding: 10px 40px;
+            border-radius: 50px;
+            border: 2px solid rgba(255,255,255,0.4);
         }
 
-        /* حاوية الآيات */
-        .verses-container {
+        .surah-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* 5 أعمدة للتلفزيون */
+            gap: 20px;
+            padding: 20px 50px;
+            width: 95%;
+            height: 75vh;
+            overflow-y: auto;
+            z-index: 20;
+            scrollbar-width: none; /* إخفاء الشريط */
+        }
+        .surah-grid::-webkit-scrollbar { display: none; }
+
+        .surah-card {
+            background: rgba(255, 255, 255, 0.85);
+            border-radius: 25px;
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #6a11cb;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 4px solid transparent;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* تصميم خاص للتركيز بالريموت */
+        .surah-card:focus, .surah-card:hover {
+            transform: scale(1.1);
+            background: #fff;
+            border-color: #ff4081;
+            box-shadow: 0 0 25px rgba(255, 64, 129, 0.6);
+            z-index: 30;
+            outline: none;
+        }
+
+        /* رقم السورة داخل الكرت */
+        .surah-num {
+            position: absolute;
+            top: 5px;
+            left: 10px;
+            font-size: 0.5em;
+            color: #999;
+            background: #eee;
+            padding: 2px 8px;
+            border-radius: 10px;
+        }
+
+        /* --- 3. شاشة المشغل (Player View) --- */
+        #playerView {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); /* تعتيم الخلفية */
+            backdrop-filter: blur(15px);
+            display: none; /* مخفي في البداية */
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+
+        .player-container {
             width: 80%;
+            max-width: 700px;
+            background: #fff9c4; /* اللون الخشبي/الورقي */
+            border-radius: 40px;
+            border: 10px solid #8d6e63;
+            padding: 30px;
             text-align: center;
-            font-size: 2em;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            position: relative;
+            transform: scale(0.8);
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        /* زر الإغلاق */
+        .close-btn {
+            position: absolute;
+            top: -25px;
+            right: -25px;
+            width: 60px;
+            height: 60px;
+            background: #ff4081;
+            color: white;
+            border-radius: 50%;
+            font-size: 30px;
+            border: 4px solid white;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            display: flex; align-items: center; justify-content: center;
+        }
+        .close-btn:focus { transform: scale(1.2); outline: none; background: #d50000; }
+
+        .surah-title-large {
+            font-size: 3em;
+            color: #5d4037;
+            margin: 0 0 20px 0;
+            text-shadow: 1px 1px 0 #fff;
+        }
+
+        .quran-text {
+            font-family: 'Amiri', serif;
+            font-size: 2.2em;
+            line-height: 2;
             color: #333;
-            background: rgba(255,255,255,0.6);
-            padding: 20px;
-            border-radius: 20px;
-            margin-top: 20px;
             max-height: 300px;
             overflow-y: auto;
+            background: rgba(255,255,255,0.5);
+            padding: 10px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
         }
 
-        .active-verse {
-            color: #d32f2f;
-            font-weight: bold;
-            transform: scale(1.1);
-            display: inline-block;
-            transition: 0.3s;
+        .ctrl-btn {
+            width: 80px; height: 80px;
+            border-radius: 50%;
+            border: none;
+            font-size: 35px;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            display: flex; align-items: center; justify-content: center;
         }
+        .play-btn { background: #4CAF50; border: 4px solid #fff; }
+        .stop-btn { background: #f44336; border: 4px solid #fff; }
+        
+        .ctrl-btn:focus { transform: scale(1.2); box-shadow: 0 0 20px white; outline: none; }
+
     </style>
 </head>
 <body>
 
-    <a href="surah_list.html" class="back-btn">رجوع للقائمة</a>
+    <img src="assets/images/girl.png" 
+         onerror="this.src='https://cdn-icons-png.flaticon.com/512/2922/2922561.png'" 
+         class="dina-bg" alt="Dina Background">
 
-    <div class="container-glass">
-        
-        <h1 class="surah-title" id="titleDisplay">جاري التحميل...</h1>
+    <div id="balloonContainer"></div>
 
-        <div class="character-container">
-            <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" class="character-img" alt="Character">
-            <div class="mouth" id="mouth"></div>
-        </div>
-
-        <div class="verses-container">
-            <p id="statusText">جاري تشغيل التلاوة...</p>
-        </div>
-
-        <audio id="quranAudio" controls style="display:none;"></audio>
-
+    <div id="listView">
+        <div class="header-title">🌟 جزء عم - دينا 🌟</div>
+        <div class="surah-grid" id="grid"></div>
     </div>
 
+    <div id="playerView">
+        <div class="player-container" id="playerCard">
+            <button class="close-btn" onclick="closePlayer()">✕</button>
+            
+            <h1 class="surah-title-large" id="pTitle">سورة ...</h1>
+            
+            <div class="quran-text" id="pText">
+                بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ
+            </div>
+
+            <div class="controls">
+                <button class="ctrl-btn stop-btn" onclick="closePlayer()">⏹</button>
+                <button class="ctrl-btn play-btn" id="btnToggle" onclick="toggleAudio()">⏸</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="mainAudio"></audio>
+
     <script>
-        // 1. استقبال البيانات من الرابط
-        const urlParams = new URLSearchParams(window.location.search);
-        const surahId = urlParams.get('id'); // مثلاً 78
-        const surahName = urlParams.get('name');
+        // --- 1. بيانات السور ---
+        const surahs = [
+            {id: 78, name: "النبأ"}, {id: 79, name: "النازعات"}, {id: 80, name: "عبس"},
+            {id: 81, name: "التكوير"}, {id: 82, name: "الانفطار"}, {id: 83, name: "المطففين"},
+            {id: 84, name: "الانشقاق"}, {id: 85, name: "البروج"}, {id: 86, name: "الطارق"},
+            {id: 87, name: "الأعلى"}, {id: 88, name: "الغاشية"}, {id: 89, name: "الفجر"},
+            {id: 90, name: "البلد"}, {id: 91, name: "الشمس"}, {id: 92, name: "الليل"},
+            {id: 93, name: "الضحى"}, {id: 94, name: "الشرح"}, {id: 95, name: "التين"},
+            {id: 96, name: "العلق"}, {id: 97, name: "القدر"}, {id: 98, name: "البينة"},
+            {id: 99, name: "الزلزلة"}, {id: 100, name: "العاديات"}, {id: 101, name: "القارعة"},
+            {id: 102, name: "التكاثر"}, {id: 103, name: "العصر"}, {id: 104, name: "الهمزة"},
+            {id: 105, name: "الفيل"}, {id: 106, name: "قريش"}, {id: 107, name: "الماعون"},
+            {id: 108, name: "الكوثر"}, {id: 109, name: "الكافرون"}, {id: 110, name: "النصر"},
+            {id: 111, name: "المسد"}, {id: 112, name: "الإخلاص"}, {id: 113, name: "الفلق"},
+            {id: 114, name: "الناس"}
+        ];
 
-        // عرض اسم السورة
-        document.getElementById('titleDisplay').innerText = "سورة " + surahName;
+        // --- 2. بناء الواجهة ---
+        const grid = document.getElementById('grid');
+        const balloonContainer = document.getElementById('balloonContainer');
+        const playerView = document.getElementById('playerView');
+        const playerCard = document.getElementById('playerCard');
+        const audio = document.getElementById('mainAudio');
+        const pTitle = document.getElementById('pTitle');
+        const btnToggle = document.getElementById('btnToggle');
 
-        // 2. إصلاح رقم السورة (إضافة أصفار)
-        // يحول 78 إلى 078، ويحول 1 إلى 001
-        const formattedId = surahId.toString().padStart(3, '0');
-
-        // 3. رابط الصوت (من موقع موثوق للتجربة)
-        // المصحف المعلم - الحصري (مناسب للأطفال)
-        const audioUrl = `https://server13.mp3quran.net/husr/Mz/${formattedId}.mp3`;
-
-        const audioPlayer = document.getElementById('quranAudio');
-        const mouth = document.getElementById('mouth');
-        const statusText = document.getElementById('statusText');
-
-        audioPlayer.src = audioUrl;
-
-        // 4. التشغيل التلقائي عند فتح الصفحة
-        window.onload = () => {
-            audioPlayer.play().then(() => {
-                statusText.innerText = "▶ يقرأ الآن...";
-            }).catch(error => {
-                statusText.innerText = "اضغط أي زر للبدء (سياسة المتصفح)";
-                // بعض المتصفحات تمنع الصوت التلقائي إلا بتفاعل
-                document.body.onclick = () => {
-                    audioPlayer.play();
-                    statusText.innerText = "▶ يقرأ الآن...";
-                };
-            });
-        };
-
-        // 5. محاكاة حركة الشفاه (Lip Sync Simulation)
-        // نستخدم محلل صوتي بسيط لتحريك الفم بناء على قوة الصوت
-        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const analyser = audioContext.createAnalyser();
-        const source = audioContext.createMediaElementSource(audioPlayer);
-        
-        source.connect(analyser);
-        analyser.connect(audioContext.destination);
-        analyser.fftSize = 256;
-        
-        const bufferLength = analyser.frequencyBinCount;
-        const dataArray = new Uint8Array(bufferLength);
-
-        function animateMouth() {
-            if (!audioPlayer.paused) {
-                analyser.getByteFrequencyData(dataArray);
-                
-                // حساب متوسط قوة الصوت
-                let sum = 0;
-                for(let i = 0; i < bufferLength; i++) {
-                    sum += dataArray[i];
-                }
-                let average = sum / bufferLength;
-
-                // تحريك الفم بناء على الصوت
-                // القيمة 10 هي الحد الأدنى لارتفاع الفم
-                let mouthHeight = 10 + (average / 2); 
-                if (mouthHeight > 40) mouthHeight = 40; // حد أقصى للفتحة
-
-                mouth.style.height = `${mouthHeight}px`;
-            } else {
-                mouth.style.height = "10px"; // إغلاق الفم عند الصمت
-            }
-            requestAnimationFrame(animateMouth);
+        // إنشاء البالونات
+        const colors = ['#ff7eb3', '#ff758c', '#42a5f5', '#66bb6a', '#ffa726'];
+        for(let i=0; i<15; i++){
+            let b = document.createElement('div');
+            b.className = 'balloon';
+            b.style.left = Math.random() * 100 + '%';
+            b.style.width = (30 + Math.random() * 40) + 'px';
+            b.style.height = (40 + Math.random() * 50) + 'px';
+            b.style.background = colors[Math.floor(Math.random()*colors.length)];
+            b.style.borderRadius = '50%';
+            b.style.animationDuration = (10 + Math.random() * 10) + 's';
+            b.style.animationDelay = (Math.random() * 5) + 's';
+            balloonContainer.appendChild(b);
         }
 
-        // تفعيل حركة الفم عند التشغيل
-        audioPlayer.onplay = () => {
-            if (audioContext.state === 'suspended') {
-                audioContext.resume();
+        // إنشاء شبكة السور
+        surahs.forEach(s => {
+            let card = document.createElement('div');
+            card.className = 'surah-card';
+            card.tabIndex = 0; // قابل للتركيز بالريموت
+            card.innerHTML = `<span class="surah-num">${s.id}</span> ${s.name}`;
+            
+            // عند النقر أو الضغط Enter
+            card.onclick = () => openSurah(s.id, s.name);
+            card.onkeydown = (e) => {
+                if(e.key === 'Enter') openSurah(s.id, s.name);
+            };
+
+            grid.appendChild(card);
+        });
+
+        // --- 3. وظائف المشغل (القلب النابض) ---
+        function openSurah(id, name) {
+            // إظهار المشغل
+            playerView.style.display = 'flex';
+            // تأخير بسيط للأنيميشن
+            setTimeout(() => {
+                playerView.style.opacity = '1';
+                playerCard.style.transform = 'scale(1)';
+            }, 50);
+
+            pTitle.innerText = "سورة " + name;
+
+            // إعداد الصوت (رابط سريع جداً MP3Quran)
+            let formattedId = id.toString().padStart(3, '0');
+            audio.src = `https://server13.mp3quran.net/husr/Mz/${formattedId}.mp3`;
+            
+            // تشغيل الصوت فوراً
+            audio.play().then(() => {
+                btnToggle.innerText = "⏸";
+                // نقل التركيز لزر الإيقاف لسهولة التحكم
+                btnToggle.focus(); 
+            }).catch(e => {
+                console.log("Auto-play blocked", e);
+                btnToggle.innerText = "▶";
+            });
+        }
+
+        function closePlayer() {
+            audio.pause();
+            audio.currentTime = 0;
+            
+            playerCard.style.transform = 'scale(0.8)';
+            playerView.style.opacity = '0';
+            
+            setTimeout(() => {
+                playerView.style.display = 'none';
+                // إعادة التركيز للقائمة
+                if(grid.children[0]) grid.children[0].focus();
+            }, 300);
+        }
+
+        function toggleAudio() {
+            if(audio.paused) {
+                audio.play();
+                btnToggle.innerText = "⏸";
+            } else {
+                audio.pause();
+                btnToggle.innerText = "▶";
             }
-            animateMouth();
+        }
+
+        // إغلاق عند انتهاء السورة
+        audio.onended = () => {
+            btnToggle.innerText = "▶";
+            setTimeout(closePlayer, 2000); // إغلاق تلقائي بعد ثانيتين
         };
 
-        // عند انتهاء السورة
-        audioPlayer.onended = () => {
-            statusText.innerText = "صدق الله العظيم";
-            mouth.style.height = "10px";
-            // يمكن هنا إضافة كود للرجوع للقائمة تلقائياً بعد ثواني
-            setTimeout(() => {
-                window.location.href = 'surah_list.html';
-            }, 3000);
+        // زر الرجوع في الريموت
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'Backspace' || e.key === 'Escape') {
+                if(playerView.style.display === 'flex') {
+                    closePlayer();
+                }
+            }
+        });
+
+        // التركيز المبدئي
+        window.onload = () => {
+            if(grid.children[0]) grid.children[0].focus();
         };
 
     </script>
