@@ -6,7 +6,7 @@
     <title>تلاوة دينا</title>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@700;900&family=Lemonada:wght@500&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. إعدادات الصفحة --- */
+        /* --- نفس التصميم الاحترافي السابق --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             margin: 0; padding: 0; height: 100vh; overflow: hidden;
@@ -16,12 +16,10 @@
             color: white;
         }
 
-        /* --- 2. الخلفية والمؤثرات --- */
         #stars, #balloons-layer { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
         .star { position: absolute; background: white; border-radius: 50%; opacity: 0.6; animation: twinkle var(--d) infinite; }
         @keyframes twinkle { 50% { opacity: 1; transform: scale(1.5); } }
 
-        /* البالونات */
         .balloon {
             position: absolute; bottom: -120px; width: 50px; height: 70px;
             border-radius: 50%; opacity: 0.7; z-index: 1;
@@ -29,10 +27,8 @@
             left: var(--x); background: var(--c);
             box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2);
         }
-        .balloon::after { content: ''; position: absolute; bottom: -15px; left: 23px; width: 2px; height: 15px; background: rgba(255,255,255,0.5); }
         @keyframes floatUp { to { transform: translateY(-120vh) rotate(360deg); } }
 
-        /* --- 3. زر الرجوع --- */
         .header {
             width: 100%; padding: 10px 20px; z-index: 50;
             display: flex; justify-content: space-between;
@@ -44,23 +40,18 @@
             border: 3px solid rgba(255,255,255,0.3); transition: 0.3s;
             cursor: pointer; outline: none;
         }
-        /* تأثير التركيز للريموت */
         .back-btn:focus, .back-btn:hover {
             transform: scale(1.2); border-color: #FFD700; background: #d32f2f;
             box-shadow: 0 0 30px #d32f2f;
         }
 
-        /* --- 4. بطاقة القراءة (مكبرة) --- */
         .quran-card {
             background: linear-gradient(to bottom, #fff9c4, #fff176);
-            width: 95%; max-width: 900px; 
-            height: 65%; /* تكبير الارتفاع */
-            margin-top: 5px; border-radius: 40px;
-            border: 8px solid #fff;
+            width: 95%; max-width: 900px; height: 65%;
+            margin-top: 5px; border-radius: 40px; border: 8px solid #fff;
             box-shadow: 0 0 50px rgba(255, 215, 0, 0.25);
             display: flex; flex-direction: column; align-items: center;
             position: relative; overflow: hidden; z-index: 10;
-            /* منع التركيز عليها بالريموت نهائياً */
             pointer-events: none;
         }
 
@@ -69,35 +60,25 @@
             padding: 5px 50px; border-radius: 0 0 30px 30px;
             color: white; font-weight: 900; font-size: 1.5rem;
             font-family: 'Lemonada', sans-serif;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            margin-bottom: 10px; z-index: 10;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2); margin-bottom: 10px; z-index: 10;
         }
 
         .quran-text-container {
             font-family: 'Amiri', serif; color: #3e2723;
-            font-size: 2rem; /* تكبير الخط */
-            line-height: 2.2; text-align: center;
-            padding: 10px 30px 60px 30px;
-            overflow-y: auto; width: 100%; flex-grow: 1;
-            scroll-behavior: smooth;
-            scrollbar-width: none;
+            font-size: 2rem; line-height: 2.2; text-align: center;
+            padding: 10px 30px 60px 30px; overflow-y: auto; width: 100%; flex-grow: 1;
+            scroll-behavior: smooth; scrollbar-width: none;
         }
         .quran-text-container::-webkit-scrollbar { display: none; }
         .basmalah { display: block; margin-bottom: 20px; font-size: 1.6rem; opacity: 0.8; }
 
-        /* تأثير الآية النشطة */
-        .verse {
-            display: inline-block; padding: 5px 10px; border-radius: 15px; margin: 4px;
-            transition: all 0.4s;
-        }
+        .verse { display: inline-block; padding: 5px 10px; border-radius: 15px; margin: 4px; transition: all 0.4s; }
         .verse-active {
             color: #d84315; font-weight: 900; font-size: 2.2rem;
-            background: rgba(255, 235, 59, 0.4);
-            transform: scale(1.08);
+            background: rgba(255, 235, 59, 0.4); transform: scale(1.08);
             text-shadow: 0 0 10px rgba(255, 87, 34, 0.5);
         }
 
-        /* --- 5. منطقة التحكم ودينا --- */
         .bottom-area {
             flex-grow: 1; width: 100%; position: relative;
             display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
@@ -112,26 +93,22 @@
         .talking { animation: bounceChar 0.5s infinite alternate; }
         @keyframes bounceChar { to { transform: translateY(-15px) scale(1.05); } }
 
-        /* أزرار التحكم - محسنة للريموت */
         .controls {
             display: flex; gap: 30px; align-items: center;
             background: rgba(20, 30, 48, 0.9); padding: 15px 40px;
             border-radius: 60px; backdrop-filter: blur(20px);
             border: 4px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            margin-bottom: 20px; margin-left: 80px;
-            z-index: 50; /* فوق كل شيء لتسهيل النقر */
+            margin-bottom: 20px; margin-left: 80px; z-index: 50;
         }
 
         .btn {
             width: 70px; height: 70px; border-radius: 50%; border: none;
             font-size: 2rem; color: white; cursor: pointer;
             display: flex; align-items: center; justify-content: center;
-            transition: all 0.2s; outline: none; /* إزالة إطار المتصفح الافتراضي */
-            position: relative;
+            transition: all 0.2s; outline: none; position: relative;
         }
 
-        /* التصميم الافتراضي للأزرار */
         .nav-btn, .repeat-btn { background: rgba(255,255,255,0.1); border: 2px solid rgba(255,255,255,0.2); }
         .play-btn { 
             width: 90px; height: 90px; font-size: 3.5rem;
@@ -139,23 +116,17 @@
             box-shadow: 0 10px 20px rgba(255, 111, 0, 0.4);
         }
 
-        /* --- أهم جزء: تأثير التركيز بالريموت (Focus) --- */
         .btn:focus, .btn:hover {
-            transform: scale(1.3);
-            border-color: #fff;
-            box-shadow: 0 0 40px #ffea00, 0 0 10px #fff;
-            z-index: 100;
+            transform: scale(1.3); border-color: #fff;
+            box-shadow: 0 0 40px #ffea00, 0 0 10px #fff; z-index: 100;
             animation: pulseFocus 1s infinite;
         }
         .play-btn:focus, .play-btn:hover {
             background: linear-gradient(135deg, #ffd54f, #ff8f00);
             box-shadow: 0 0 60px #ff6f00, 0 0 20px #fff;
         }
-
         @keyframes pulseFocus { 0% { box-shadow: 0 0 30px #ffea00; } 50% { box-shadow: 0 0 60px #ffea00; } 100% { box-shadow: 0 0 30px #ffea00; } }
-
         .repeat-active { background: #00e676 !important; color: #004d40; border-color: white; }
-
     </style>
 </head>
 <body>
@@ -164,7 +135,7 @@
     <div id="balloons-layer"></div>
 
     <div class="header">
-        <a href="surah_list.html" class="back-btn" id="backBtn" onclick="stopAudio()" tabindex="1">🔙</a>
+        <button class="back-btn" onclick="goBack()" tabindex="1">🔙</button>
     </div>
 
     <div class="quran-card" tabindex="-1">
@@ -174,7 +145,6 @@
 
     <div class="bottom-area">
         <img src="assets/images/girl.png" class="dina-char" id="dinaImg" alt="دينا">
-        
         <div class="controls">
             <button class="btn repeat-btn" id="loopBtn" onclick="toggleLoop()" tabindex="4">🔁</button>
             <button class="btn nav-btn" onclick="seek(-5)" tabindex="3">⏪</button>
@@ -186,12 +156,16 @@
     <audio id="audioPlayer"></audio>
 
     <script>
-        // --- بيانات السور (تم دمجها كلها هنا لتعمل فوراً) ---
+        // --- تحديث قاعدة البيانات بالسور الجديدة ---
         const quranData = {
             101: { name: "القارعة", verses: ["ٱلۡقَارِعَةُ (1)", "مَا ٱلۡقَارِعَةُ (2)", "وَمَآ أَدۡرَىٰكَ مَا ٱلۡقَارِعَةُ (3)", "يَوۡمَ يَكُونُ ٱلنَّاسُ كَٱلۡفَرَاشِ ٱلۡمَبۡثُوثِ (4)", "وَتَكُونُ ٱلۡجِبَالُ كَٱلۡعِهۡنِ ٱلۡمَنفُوشِ (5)", "فَأَمَّا مَن ثَقُلَتۡ مَوَٰزِينُهُۥ (6)", "فَهُوَ فِي عِيشَةٖ رَّاضِيَةٖ (7)", "وَأَمَّا مَنۡ خَفَّتۡ مَوَٰزِينُهُۥ (8)", "فَأُمُّهُۥ هَاوِيَةٞ (9)", "وَمَآ أَدۡرَىٰكَ مَا هِيَهۡ (10)", "نَارٌ حَامِيَةُۢ (11)"] },
             102: { name: "التكاثر", verses: ["أَلۡهَىٰكُمُ ٱلتَّكَاثُرُ (1)", "حَتَّىٰ زُرۡتُمُ ٱلۡمَقَابِرَ (2)", "كَلَّا سَوۡفَ تَعۡلَمُونَ (3)", "ثُمَّ كَلَّا سَوۡفَ تَعۡلَمُونَ (4)", "كَلَّا لَوۡ تَعۡلَمُونَ عِلۡمَ ٱلۡيَقِينِ (5)", "لَتَرَوُنَّ ٱلۡجَحِيمَ (6)", "ثُمَّ لَتَرَوُنَّهَا عَيۡنَ ٱلۡيَقِينِ (7)", "ثُمَّ لَتُسۡـَٔلُنَّ يَوۡمَئِذٍ عَنِ ٱلنَّعِيمِ (8)"] },
             103: { name: "العصر", verses: ["وَٱلۡعَصۡرِ (1)", "إِنَّ ٱلۡإِنسَٰنَ لَفِي خُسۡرٍ (2)", "إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّـٰلِحَٰتِ وَتَوَاصَوۡاْ بِٱلۡحَقِّ وَتَوَاصَوۡاْ بِٱلصَّبۡرِ (3)"] },
-            104: { name: "الهمزة", verses: ["وَيۡلٞ لِّكُلِّ هُمَزَةٖ لُّمَزَةٍ (1)", "ٱلَّذِي جَمَعَ مَالٗا وَعَدَّدَهُۥ (2)", "يَحۡسَبُ أَنَّ مَالَهُۥٓ أَخۡلَدَهُۥ (3)", "كَلَّاۖ لَيُنۢبَذَنَّ فِي ٱلۡحُطَمَةِ (4)", "وَمَآ أَدۡرَىٰكَ مَا ٱلۡحُطَمَةُ (5)", "نَارُ ٱللَّهِ ٱلۡمُوقَدَةُ (6)", "ٱلَّتِي تَطَّلِعُ عَلَى ٱلۡأَفۡـِٔدَةِ (7)", "إِنَّهَا عَلَيۡهِم مُّؤۡصَدَةٞ (8)", "فِي عَمَدٖ مُّمَدَّدَةِۢ (9)"] }
+            104: { name: "الهمزة", verses: ["وَيۡلٞ لِّكُلِّ هُمَزَةٖ لُّمَزَةٍ (1)", "ٱلَّذِي جَمَعَ مَالٗا وَعَدَّدَهُۥ (2)", "يَحۡسَبُ أَنَّ مَالَهُۥٓ أَخۡلَدَهُۥ (3)", "كَلَّاۖ لَيُنۢبَذَنَّ فِي ٱلۡحُطَمَةِ (4)", "وَمَآ أَدۡرَىٰكَ مَا ٱلۡحُطَمَةُ (5)", "نَارُ ٱللَّهِ ٱلۡمُوقَدَةُ (6)", "ٱلَّتِي تَطَّلِعُ عَلَى ٱلۡأَفۡـِٔدَةِ (7)", "إِنَّهَا عَلَيۡهِم مُّؤۡصَدَةٞ (8)", "فِي عَمَدٖ مُّمَدَّدَةِۢ (9)"] },
+            // --- السور الجديدة التي أضفتها الآن ---
+            107: { name: "الماعون", verses: ["أَرَءَيۡتَ ٱلَّذِي يُكَذِّبُ بِٱلدِّينِ (1)", "فَذَٰلِكَ ٱلَّذِي يَدُعُّ ٱلۡيَتِيمَ (2)", "وَلَا يَحُضُّ عَلَىٰ طَعَامِ ٱلۡمِسۡكِينِ (3)", "فَوَيۡلٞ لِّلۡمُصَلِّينَ (4)", "ٱلَّذِينَ هُمۡ عَن صَلَاتِهِمۡ سَاهُونَ (5)", "ٱلَّذِينَ هُمۡ يُرَآءُونَ (6)", "وَيَمۡنَعُونَ ٱلۡمَاعُونَ (7)"] },
+            109: { name: "الكافرون", verses: ["قُلۡ يَـٰٓأَيُّهَا ٱلۡكَٰفِرُونَ (1)", "لَآ أَعۡبُدُ مَا تَعۡبُدُونَ (2)", "وَلَآ أَنتُمۡ عَٰبِدُونَ مَآ أَعۡبُدُ (3)", "وَلَآ أَنَا۠ عَابِدٞ مَّا عَبَدتُّمۡ (4)", "وَلَآ أَنتُمۡ عَٰبِدُونَ مَآ أَعۡبُدُ (5)", "لَكُمۡ دِينُكُمۡ وَلِيَ دِينِ (6)"] },
+            111: { name: "المسد", verses: ["تَبَّتۡ يَدَآ أَبِي لَهَبٖ وَتَبَّ (1)", "مَآ أَغۡنَىٰ عَنۡهُ مَالُهُۥ وَمَا كَسَبَ (2)", "سَيَصۡلَىٰ نَارٗا ذَاتَ لَهَبٖ (3)", "وَٱمۡرَأَتُهُۥ حَمَّالَةَ ٱلۡحَطَبِ (4)", "فِي جِيدِهَا حَبۡلٞ مِّن مَّسَدِۢ (5)"] }
         };
 
         const audio = document.getElementById('audioPlayer');
@@ -199,13 +173,9 @@
         const textContainer = document.getElementById('textContainer');
         let currentVersesElements = [];
 
-        // تشغيل البالونات والبيانات
         window.onload = () => {
-            // 1. إنشاء البالونات
             createBalloons();
             createStars();
-
-            // 2. تحميل السورة
             const urlParams = new URLSearchParams(window.location.search);
             const id = urlParams.get('id');
             if (quranData[id]) {
@@ -218,22 +188,36 @@
             } else {
                 textContainer.innerHTML = "<p>قريباً...</p>";
             }
-
-            // 3. وضع التركيز فوراً على زر التشغيل (للريموت)
             playBtn.focus();
         };
 
-        // --- إيقاف الصوت عند الخروج ---
-        function stopAudio() {
+        // --- نظام إيقاف الصوت الحازم ---
+        function killAudio() {
             audio.pause();
             audio.currentTime = 0;
+            audio.src = ""; // تفريغ المصدر
         }
-        window.onpagehide = stopAudio; // للمتصفحات الحديثة
-        window.onbeforeunload = stopAudio; // تأكيد إضافي
+
+        function goBack() {
+            killAudio();
+            window.location.href = 'surah_list.html';
+        }
+
+        window.addEventListener('beforeunload', killAudio);
+        document.addEventListener('visibilitychange', () => {
+            if (document.hidden) {
+                killAudio();
+                playBtn.innerText = "▶";
+            }
+        });
 
         // --- التحكم ---
         function togglePlay() {
             if (audio.paused) {
+                if(!audio.src) {
+                    const id = new URLSearchParams(window.location.search).get('id');
+                    audio.src = `${id}.mp3`;
+                }
                 audio.play();
                 playBtn.innerText = "⏸";
                 document.getElementById('dinaImg').classList.add('talking');
@@ -251,13 +235,11 @@
 
         function seek(sec) { audio.currentTime += sec; }
 
-        // --- التزامن السحري (Magic Sync) ---
         audio.ontimeupdate = () => {
             if (!audio.duration || currentVersesElements.length === 0) return;
             const progress = audio.currentTime / audio.duration;
             let idx = Math.floor(progress * currentVersesElements.length);
             idx = Math.min(idx, currentVersesElements.length - 1);
-
             currentVersesElements.forEach(el => el.classList.remove('verse-active'));
             if (currentVersesElements[idx]) {
                 const el = currentVersesElements[idx];
@@ -272,11 +254,10 @@
                 document.getElementById('dinaImg').classList.remove('talking');
                 currentVersesElements.forEach(el => el.classList.remove('verse-active'));
                 textContainer.scrollTo({ top: 0, behavior: 'smooth' });
-                playBtn.focus(); // إعادة التركيز لزر التشغيل
+                playBtn.focus();
             }
         };
 
-        // --- وظائف الجماليات ---
         function createBalloons() {
             const c = document.getElementById('balloons-layer');
             const colors = ['#e91e63', '#00bcd4', '#ffeb3b', '#8bc34a'];
