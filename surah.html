@@ -6,13 +6,12 @@
     <title>المصحف المعلم - دينا</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. إعدادات الصفحة والخلفية --- */
+        /* نفس التصميم السابق تماماً */
         * { box-sizing: border-box; }
         body {
             margin: 0;
             padding: 0;
             height: 100vh;
-            /* خلفية تركوازية متدرجة تشبه تصميم التطبيقات التعليمية */
             background: linear-gradient(180deg, #80cbc4 0%, #26a69a 100%);
             display: flex;
             flex-direction: column;
@@ -23,7 +22,6 @@
             direction: rtl;
         }
 
-        /* --- 2. الأزرار العلوية --- */
         .top-bar {
             width: 100%;
             padding: 20px;
@@ -60,15 +58,13 @@
             outline: none;
         }
 
-        /* --- 3. اللوح الخشبي (حاوية النص) --- */
         .paper-board {
-            margin-top: 14vh; /* مسافة من الأعلى */
+            margin-top: 14vh;
             width: 90%;
             max-width: 650px;
-            height: 48vh; /* ارتفاع اللوحة */
-            background: #fff9c4; /* لون ورق كريمي */
+            height: 48vh;
+            background: #fff9c4;
             border-radius: 30px;
-            /* إطار مزدوج ليعطي شكل الخشب */
             border: 8px solid #efebe9; 
             outline: 6px solid #8d6e63;
             box-shadow: 0 20px 50px rgba(0,0,0,0.3);
@@ -80,7 +76,6 @@
             z-index: 10;
         }
 
-        /* لافتة اسم السورة */
         .title-wood-sign {
             position: absolute;
             top: -38px;
@@ -97,26 +92,23 @@
             white-space: nowrap;
         }
 
-        /* منطقة النص القرآني */
         .quran-text-area {
             width: 100%;
             height: 100%;
             margin-top: 10px;
             text-align: center;
-            font-family: 'Amiri', serif; /* الخط القرآني */
+            font-family: 'Amiri', serif;
             font-size: 26px;
             color: #3e2723;
             font-weight: bold;
             line-height: 2.3;
             overflow-y: auto;
             padding: 5px 10px;
-            /* تأثير الحركة للنص */
             animation: fadeIn 0.5s ease-in;
         }
         
         .quran-text-area::-webkit-scrollbar { display: none; }
 
-        /* تنسيق الآيات وأرقامها */
         .ayah-num {
             color: #d32f2f;
             font-family: 'Cairo', sans-serif;
@@ -137,13 +129,12 @@
             color: #5d4037;
         }
 
-        /* --- 4. أزرار التحكم --- */
         .controls-container {
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 25px;
-            margin-top: -30px; /* تداخل مع اللوحة */
+            margin-top: -30px;
             z-index: 30;
             position: relative;
         }
@@ -164,7 +155,7 @@
 
         .btn-play {
             width: 90px;
-            height: 80px; /* بيضاوي قليلاً */
+            height: 80px;
             border-radius: 40px;
             font-size: 35px;
         }
@@ -183,7 +174,6 @@
             box-shadow: 0 0 20px #ffeb3b;
         }
 
-        /* --- 5. منطقة الشخصيات (دينا) --- */
         .characters-area {
             position: absolute;
             bottom: -20px;
@@ -198,10 +188,9 @@
 
         .img-char {
             height: 100%;
-            max-height: 380px; /* تكبير الصورة قليلاً */
+            max-height: 380px;
             object-fit: contain;
             filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
-            /* حركة دخول من الأسفل */
             animation: slideUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
         }
 
@@ -223,8 +212,7 @@
     <div class="paper-board">
         <div class="title-wood-sign" id="surahNameTitle">...</div>
 
-        <div class="quran-text-area" id="quranText">
-            </div>
+        <div class="quran-text-area" id="quranText"></div>
     </div>
 
     <div class="controls-container">
@@ -240,7 +228,47 @@
     <audio id="audioPlayer" preload="auto"></audio>
 
     <script>
-        // --- 1. بيانات السور والنص القرآني (مخزنة محلياً) ---
+        // --- 1. القائمة اليدوية للروابط الصوتية (كما طلبت تماماً) ---
+        const audioSources = {
+            78: "https://islamhouse.com/ar/audio/335295/1.mp3",  // النبأ
+            79: "https://islamhouse.com/ar/audio/335295/2.mp3",  // النازعات
+            80: "https://islamhouse.com/ar/audio/335295/3.mp3",  // عبس
+            81: "https://islamhouse.com/ar/audio/335295/4.mp3",  // التكوير
+            82: "https://islamhouse.com/ar/audio/335295/5.mp3",  // الانفطار
+            83: "https://islamhouse.com/ar/audio/335295/6.mp3",  // المطففين
+            84: "https://islamhouse.com/ar/audio/335295/7.mp3",  // الانشقاق
+            85: "https://islamhouse.com/ar/audio/335295/8.mp3",  // البروج
+            86: "https://islamhouse.com/ar/audio/335295/9.mp3",  // الطارق
+            87: "https://islamhouse.com/ar/audio/335295/10.mp3", // الأعلى
+            88: "https://islamhouse.com/ar/audio/335295/11.mp3", // الغاشية
+            89: "https://islamhouse.com/ar/audio/335295/12.mp3", // الفجر
+            90: "https://islamhouse.com/ar/audio/335295/13.mp3", // البلد
+            91: "https://islamhouse.com/ar/audio/335295/14.mp3", // الشمس
+            92: "https://islamhouse.com/ar/audio/335295/15.mp3", // الليل
+            93: "https://islamhouse.com/ar/audio/335295/16.mp3", // الضحى
+            94: "https://islamhouse.com/ar/audio/335295/17.mp3", // الشرح
+            95: "https://islamhouse.com/ar/audio/335295/17.mp3", // التين (تنبيه: الرابط 17 مكرر في رسالتك للشرح والتين، تأكد من المصدر، وضعتها كما هي)
+            96: "https://islamhouse.com/ar/audio/335295/18.mp3", // العلق
+            97: "https://islamhouse.com/ar/audio/335295/19.mp3", // القدر
+            98: "https://islamhouse.com/ar/audio/335295/20.mp3", // البينة
+            99: "https://islamhouse.com/ar/audio/335295/21.mp3", // الزلزلة
+            100: "https://islamhouse.com/ar/audio/335295/22.mp3", // العاديات
+            101: "https://islamhouse.com/ar/audio/335295/23.mp3", // القارعة
+            102: "https://islamhouse.com/ar/audio/335295/24.mp3", // التكاثر
+            103: "https://islamhouse.com/ar/audio/335295/25.mp3", // العصر
+            104: "https://islamhouse.com/ar/audio/335295/26.mp3", // الهمزة
+            105: "https://islamhouse.com/ar/audio/335295/27.mp3", // الفيل
+            106: "https://islamhouse.com/ar/audio/335295/28.mp3", // قريش
+            107: "https://islamhouse.com/ar/audio/335295/29.mp3", // الماعون
+            108: "https://islamhouse.com/ar/audio/335295/30.mp3", // الكوثر
+            109: "https://islamhouse.com/ar/audio/335295/31.mp3", // الكافرون
+            110: "https://islamhouse.com/ar/audio/335295/32.mp3", // النصر
+            111: "https://islamhouse.com/ar/audio/335295/33.mp3", // المسد
+            112: "https://islamhouse.com/ar/audio/335295/34.mp3", // الإخلاص
+            113: "https://islamhouse.com/ar/audio/335295/35.mp3", // الفلق
+            114: "https://islamhouse.com/ar/audio/335295/36.mp3"  // الناس
+        };
+
         const quranData = {
             78: `بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ
 عَمَّ يَتَسَآءَلُونَ (1) عَنِ ٱلنَّبَإِ ٱلۡعَظِيمِ (2) ٱلَّذِي هُمۡ فِيهِ مُخۡتَلِفُونَ (3) كَلَّا سَيَعۡلَمُونَ (4) ثُمَّ كَلَّا سَيَعۡلَمُونَ (5) أَلَمۡ نَجۡعَلِ ٱلۡأَرۡضَ مِهَٰدٗا (6) وَٱلۡجِبَالَ أَوۡتَادٗا (7) وَخَلَقۡنَٰكُمۡ أَزۡوَٰجٗا (8) وَجَعَلۡنَا نَوۡمَكُمۡ سُبَاتٗا (9) وَجَعَلۡنَا ٱلَّيۡلَ لِبَاسٗا (10) وَجَعَلۡنَا ٱلنَّهَارَ مَعَاشٗا (11) وَبَنَيۡنَا فَوۡقَكُمۡ سَبۡعٗا شِدَادٗا (12) وَجَعَلۡنَا سِرَاجٗا وَهَّاجٗا (13) وَأَنزَلۡنَا مِنَ ٱلۡمُعۡصِرَٰتِ مَآءٗ ثَجَّاجٗا (14) لِّنُخۡرِجَ بِهِۦ حَبّٗا وَنَبَاتٗا (15) وَجَنَّـٰتٍ أَلۡفَافًا (16) إِنَّ يَوۡمَ ٱلۡفَصۡلِ كَانَ مِيقَٰتٗا (17) يَوۡمَ يُنفَخُ فِي ٱلصُّورِ فَتَأۡتُونَ أَفۡوَاجٗا (18) وَفُتِحَتِ ٱلسَّمَآءُ فَكَانَتۡ أَبۡوَٰبٗا (19) وَسُيِّرَتِ ٱلۡجِبَالُ فَكَانَتۡ سَرَابًا (20) إِنَّ جَهَنَّمَ كَانَتۡ مِرۡصَادٗا (21) لِّلطَّـٰغِينَ مَـَٔابٗا (22) لَّـٰبِثِينَ فِيهَآ أَحۡقَابٗا (23) لَّا يَذُوقُونَ فِيهَا بَرۡدٗا وَلَا شَرَابًا (24) إِلَّا حَمِيمٗا وَغَسَّاقٗا (25) جَزَآءٗ وِفَاقًا (26) إِنَّهُمۡ كَانُواْ لَا يَرۡجُونَ حِسَابٗا (27) وَكَذَّبُواْ بِـَٔايَٰتِنَا كِذَّابٗا (28) وَكُلَّ شَيۡءٍ أَحۡصَيۡنَٰهُ كِتَٰبٗا (29) فَذُوقُواْ فَلَن نَّزِيدَكُمۡ إِلَّا عَذَابًا (30) إِنَّ لِلۡمُتَّقِينَ مَفَازًا (31) حَدَآئِقَ وَأَعۡنَٰبٗا (32) وَكَوَاعِبَ أَتۡرَابٗا (33) وَكَأۡسٗا دِهَاقٗا (34) لَّا يَسۡمَعُونَ فِيهَا لَغۡوٗا وَلَا كِذَّٰبٗا (35) جَزَآءٗ مِّن رَّبِّكَ عَطَآءً حِسَابٗا (36) رَّبِّ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِ وَمَا بَيۡنَهُمَا ٱلرَّحۡمَٰنِۖ لَا يَمۡلِكُونَ مِنۡهُ خِطَابٗا (37) يَوۡمَ يَقُومُ ٱلرُّوحُ وَٱلۡمَلَـٰٓئِكَةُ صَفّٗاۖ لَّا يَتَكَلَّمُونَ إِلَّا مَنۡ أَذِنَ لَهُ ٱلرَّحۡمَٰنُ وَقَالَ صَوَابٗا (38) ذَٰلِكَ ٱلۡيَوۡمُ ٱلۡحَقُّۖ فَمَن شَآءَ ٱتَّخَذَ إِلَىٰ رَبِّهِۦ مَـَٔابًا (39) إِنَّآ أَنذَرۡنَٰكُمۡ عَذَابٗا قَرِيبٗا يَوۡمَ يَنظُرُ ٱلۡمَرۡءُ مَا قَدَّمَتۡ يَدَاهُ وَيَقُولُ ٱلۡكَافِرُ يَٰلَيۡتَنِي كُنتُ تُرَٰبَۢا (40)`,
@@ -318,75 +346,6 @@
 قُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ (1) مَلِكِ ٱلنَّاسِ (2) إِلَٰهِ ٱلنَّاسِ (3) مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ (4) ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ (5) مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ (6)`
         };
 
-        // --- 2. المتغيرات والعناصر ---
-        const urlParams = new URLSearchParams(window.location.search);
-        let currentId = parseInt(urlParams.get('id')) || 78; // نبدأ افتراضياً بالنبأ
-        let currentName = urlParams.get('name') || "النبأ";
-
-        const audioPlayer = document.getElementById('audioPlayer');
-        const quranText = document.getElementById('quranText');
-        const surahNameTitle = document.getElementById('surahNameTitle');
-        const btnPlay = document.getElementById('btnPlay');
-        let isPlaying = false;
-
-        // --- 3. دالة تنسيق النص القرآني ---
-        function formatQuranText(text) {
-            // إضافة كلاس للبسملة
-            let formatted = text.replace('بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ', '<span class="basmala">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ</span>');
-            // تحويل الأرقام (1) إلى شكل مزخرف
-            // نستبدل (رقم) بـ span
-            formatted = formatted.replace(/\((\d+)\)/g, '<span class="ayah-num">﴿$1﴾</span>');
-            // استبدال فواصل الأسطر بـ <br>
-            formatted = formatted.replace(/\n/g, '<br>');
-            return formatted;
-        }
-
-        // --- 4. تحميل السورة ---
-        function loadSurah(id, name) {
-            surahNameTitle.innerText = "سورة " + name;
-
-            // تحديد رابط الصوت بناءً على طلبك (IslamHouse)
-            // المعادلة: رقم السورة - 77 = رقم الملف
-            // مثال: النبأ (78) - 77 = 1.mp3
-            // مثال: الناس (114) - 77 = 37.mp3
-            const fileNumber = id - 77;
-            const audioUrl = `https://islamhouse.com/ar/audio/335295/${fileNumber}.mp3`;
-            
-            audioPlayer.src = audioUrl;
-
-            // عرض النص من البيانات المخزنة لدينا
-            if (quranData[id]) {
-                quranText.innerHTML = formatQuranText(quranData[id]);
-            } else {
-                quranText.innerHTML = "النص غير متوفر حالياً";
-            }
-        }
-
-        // --- 5. التحكم بالصوت ---
-        function togglePlay() {
-            if (audioPlayer.paused) {
-                const playPromise = audioPlayer.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(_ => {
-                        btnPlay.innerText = "⏸";
-                        isPlaying = true;
-                    }).catch(error => console.error("Error playing:", error));
-                }
-            } else {
-                audioPlayer.pause();
-                btnPlay.innerText = "▶";
-                isPlaying = false;
-            }
-        }
-
-        audioPlayer.onended = () => {
-            btnPlay.innerText = "▶";
-            isPlaying = false;
-            // تشغيل السورة التالية تلقائياً إذا أردت (اختياري)
-            // nextSurah();
-        };
-
-        // --- 6. التنقل بين السور ---
         const surahNames = {
             78: "النبأ", 79: "النازعات", 80: "عبس", 81: "التكوير",
             82: "الانفطار", 83: "المطففين", 84: "الانشقاق", 85: "البروج", 86: "الطارق",
@@ -398,15 +357,93 @@
             112: "الإخلاص", 113: "الفلق", 114: "الناس"
         };
 
+        // --- 2. المتغيرات والعناصر ---
+        const urlParams = new URLSearchParams(window.location.search);
+        let currentId = parseInt(urlParams.get('id')) || 78; 
+        let currentName = urlParams.get('name') || "النبأ";
+
+        const audioPlayer = document.getElementById('audioPlayer');
+        const quranText = document.getElementById('quranText');
+        const surahNameTitle = document.getElementById('surahNameTitle');
+        const btnPlay = document.getElementById('btnPlay');
+        let isPlaying = false;
+
+        // --- 3. دالة تنسيق النص القرآني ---
+        function formatQuranText(text) {
+            let formatted = text.replace('بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ', '<span class="basmala">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ</span>');
+            formatted = formatted.replace(/\((\d+)\)/g, '<span class="ayah-num">﴿$1﴾</span>');
+            formatted = formatted.replace(/\n/g, '<br>');
+            return formatted;
+        }
+
+        // --- 4. تحميل السورة ---
+        function loadSurah(id, name) {
+            surahNameTitle.innerText = "سورة " + name;
+
+            // استخدام الرابط المباشر من القائمة التي زودتنا بها
+            const audioUrl = audioSources[id];
+            
+            if (audioUrl) {
+                audioPlayer.src = audioUrl;
+                // تحميل الملف فوراً للتأكد من جاهزيته
+                audioPlayer.load();
+            } else {
+                console.error("Audio link not found for ID:", id);
+            }
+
+            if (quranData[id]) {
+                quranText.innerHTML = formatQuranText(quranData[id]);
+            } else {
+                quranText.innerHTML = "النص غير متوفر حالياً";
+            }
+        }
+
+        // --- 5. التحكم بالصوت (تعديل هام للإصلاح) ---
+        function togglePlay() {
+            if (audioPlayer.paused) {
+                // محاولة التشغيل
+                const playPromise = audioPlayer.play();
+                
+                if (playPromise !== undefined) {
+                    playPromise.then(_ => {
+                        // نجح التشغيل
+                        btnPlay.innerText = "⏸";
+                        isPlaying = true;
+                    }).catch(error => {
+                        console.error("Error playing:", error);
+                        // إذا فشل التشغيل (قد يكون بسبب المتصفح)
+                        // يمكن إضافة تنبيه للمستخدم هنا
+                    });
+                }
+            } else {
+                audioPlayer.pause();
+                btnPlay.innerText = "▶";
+                isPlaying = false;
+            }
+        }
+
+        // عند انتهاء الملف الصوتي
+        audioPlayer.onended = () => {
+            btnPlay.innerText = "▶";
+            isPlaying = false;
+        };
+
+        // معالجة أخطاء الصوت
+        audioPlayer.onerror = () => {
+             // تنبيه فقط للمطور، المستخدم لن يرى شيئاً مزعجاً
+             console.log("Error loading audio source.");
+        };
+
+        // --- 6. التنقل ---
         function nextSurah() {
             let nextId = currentId + 1;
-            if (nextId > 114) nextId = 78; // العودة للبداية
+            if (nextId > 114) nextId = 78;
             updateSurah(nextId);
         }
 
         function prevSurah() {
             let prevId = currentId - 1;
-            if (prevId < 78) prevId = 114; // العودة للنهاية
+            if (prevId < 78) prevId = 114;
             updateSurah(prevId);
         }
 
@@ -417,6 +454,7 @@
             const newUrl = `surah.html?id=${newId}&name=${encodeURIComponent(name)}`;
             window.history.pushState({path: newUrl}, '', newUrl);
 
+            // إيقاف الصوت وإعادة تعيين الأيقونة
             audioPlayer.pause();
             btnPlay.innerText = "▶";
             loadSurah(currentId, name);
@@ -428,7 +466,6 @@
             btnPlay.focus();
         };
 
-        // دعم الرجوع
         document.addEventListener('keydown', function(e) {
             if(e.key === 'Backspace' || e.key === 'Escape') {
                 window.location.href = 'surah_list.html';
