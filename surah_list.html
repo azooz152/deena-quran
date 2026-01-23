@@ -1,164 +1,164 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>سور جزء عم - دينا</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سور جزء عم - دينا</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Tahoma', sans-serif;
+        }
 
-<style>
-body {
-    background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
-    height: 100vh;
-    overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Tahoma', sans-serif;
-    direction: rtl;
-}
+        .container-glass {
+            width: 95%;
+            height: 90vh;
+            background: rgba(255, 255, 255, 0.25);
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
 
-.container-glass {
-    width: 95%;
-    height: 90vh;
-    background: rgba(255, 255, 255, 0.25);
-    box-shadow: 0 8px 32px rgba(31,38,135,.37);
-    backdrop-filter: blur(8px);
-    border-radius: 30px;
-    padding: 20px;
-    position: relative;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-}
+        .title-box {
+            background: #fff;
+            color: #6a11cb;
+            padding: 10px 50px;
+            border-radius: 50px;
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
 
-.title-box {
-    background: #fff;
-    color: #6a11cb;
-    padding: 10px 50px;
-    border-radius: 50px;
-    font-size: 2em;
-    font-weight: bold;
-    margin-bottom: 20px;
-    box-shadow: 0 5px 15px rgba(0,0,0,.2);
-}
+        /* زر الرجوع للرئيسية */
+        .back-home {
+            position: absolute;
+            top: 25px;
+            left: 25px;
+            background: #ff4081;
+            color: #fff;
+            text-decoration: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            border: 2px solid #fff;
+            transition: transform 0.2s;
+            z-index: 100;
+        }
+        .back-home:focus, .back-home:hover {
+            transform: scale(1.1);
+            background: #c2185b;
+            outline: 3px solid #fff;
+        }
 
-.back-home {
-    position: absolute;
-    top: 25px;
-    left: 25px;
-    background: #ff4081;
-    color: #fff;
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size: 30px;
-    border: 2px solid #fff;
-    text-decoration:none;
-}
+        .grid-surahs {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 15px;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding: 10px;
+            scrollbar-width: none;
+        }
+        .grid-surahs::-webkit-scrollbar { display: none; }
 
-.back-home:focus {
-    outline: 3px solid #fff;
-    transform: scale(1.1);
-}
+        .surah-btn {
+            background: linear-gradient(45deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            border: 3px solid #fff;
+            border-radius: 20px;
+            height: 80px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+            transition: transform 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+        }
 
-.grid-surahs {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 15px;
-    width: 100%;
-    height: 100%;
-    overflow-y: auto;
-    padding: 10px;
-}
-
-.grid-surahs::-webkit-scrollbar { display: none; }
-
-.surah-btn {
-    background: linear-gradient(45deg, #ff9a9e, #fad0c4);
-    border: 3px solid #fff;
-    border-radius: 20px;
-    height: 80px;
-    font-size: 1.2em;
-    font-weight: bold;
-    color: #fff;
-    cursor: pointer;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    text-decoration:none;
-    transition: transform .2s;
-}
-
-.surah-btn:focus {
-    transform: scale(1.1);
-    background: linear-gradient(45deg, #a18cd1, #fbc2eb);
-    box-shadow: 0 0 20px #ff4081;
-    border-color: #ff4081;
-    outline: none;
-}
-</style>
+        .surah-btn:focus {
+            transform: scale(1.1);
+            background: linear-gradient(45deg, #a18cd1 0%, #fbc2eb 100%);
+            box-shadow: 0 0 20px #ff4081;
+            border-color: #ff4081;
+            outline: none;
+            z-index: 10;
+        }
+    </style>
 </head>
-
 <body>
 
-<audio id="clickSound" preload="none"
-src="https://www.soundjay.com/button/sounds/button-3.mp3"></audio>
+    <audio id="clickSound" src="https://www.soundjay.com/button/sounds/button-3.mp3"></audio>
 
-<div class="container-glass">
-    <div class="title-box">جزء عمّ - القارئ الصغير</div>
-    <a href="index.html" class="back-home" id="btnHome">🏠</a>
-    <div class="grid-surahs" id="surahGrid"></div>
-</div>
+    <div class="container-glass">
+        <div class="title-box">جزء عمّ - القارئ الصغير</div>
+        
+        <a href="index.html" class="back-home" id="btnHome">🏠</a>
 
-<script>
-const surahs = [
- {id:78,name:"النبأ"},{id:79,name:"النازعات"},{id:80,name:"عبس"},
- {id:81,name:"التكوير"},{id:82,name:"الانفطار"},{id:83,name:"المطففين"},
- {id:84,name:"الانشقاق"},{id:85,name:"البروج"},{id:86,name:"الطارق"},
- {id:87,name:"الأعلى"},{id:88,name:"الغاشية"},{id:89,name:"الفجر"},
- {id:90,name:"البلد"},{id:91,name:"الشمس"},{id:92,name:"الليل"},
- {id:93,name:"الضحى"},{id:94,name:"الشرح"},{id:95,name:"التين"},
- {id:96,name:"العلق"},{id:97,name:"القدر"},{id:98,name:"البينة"},
- {id:99,name:"الزلزلة"},{id:100,name:"العاديات"},{id:101,name:"القارعة"},
- {id:102,name:"التكاثر"},{id:103,name:"العصر"},{id:104,name:"الهمزة"},
- {id:105,name:"الفيل"},{id:106,name:"قريش"},{id:107,name:"الماعون"},
- {id:108,name:"الكوثر"},{id:109,name:"الكافرون"},{id:110,name:"النصر"},
- {id:111,name:"المسد"},{id:112,name:"الإخلاص"},{id:113,name:"الفلق"},
- {id:114,name:"الناس"}
-];
+        <div class="grid-surahs" id="surahGrid"></div>
+    </div>
 
-const grid = document.getElementById('surahGrid');
-const clickSound = document.getElementById('clickSound');
+    <script>
+        const surahs = [
+            {id: 78, name: "النبأ"}, {id: 79, name: "النازعات"}, {id: 80, name: "عبس"},
+            {id: 81, name: "التكوير"}, {id: 82, name: "الانفطار"}, {id: 83, name: "المطففين"},
+            {id: 84, name: "الانشقاق"}, {id: 85, name: "البروج"}, {id: 86, name: "الطارق"},
+            {id: 87, name: "الأعلى"}, {id: 88, name: "الغاشية"}, {id: 89, name: "الفجر"},
+            {id: 90, name: "البلد"}, {id: 91, name: "الشمس"}, {id: 92, name: "الليل"},
+            {id: 93, name: "الضحى"}, {id: 94, name: "الشرح"}, {id: 95, name: "التين"},
+            {id: 96, name: "العلق"}, {id: 97, name: "القدر"}, {id: 98, name: "البينة"},
+            {id: 99, name: "الزلزلة"}, {id: 100, name: "العاديات"}, {id: 101, name: "القارعة"},
+            {id: 102, name: "التكاثر"}, {id: 103, name: "العصر"}, {id: 104, name: "الهمزة"},
+            {id: 105, name: "الفيل"}, {id: 106, name: "قريش"}, {id: 107, name: "الماعون"},
+            {id: 108, name: "الكوثر"}, {id: 109, name: "الكافرون"}, {id: 110, name: "النصر"},
+            {id: 111, name: "المسد"}, {id: 112, name: "الإخلاص"}, {id: 113, name: "الفلق"},
+            {id: 114, name: "الناس"}
+        ];
 
-surahs.forEach(s=>{
-    const btn = document.createElement('a');
-    btn.className = 'surah-btn';
-    btn.textContent = s.name;
-    btn.tabIndex = 0;
+        const grid = document.getElementById('surahGrid');
+        const clickSound = document.getElementById('clickSound');
 
-    btn.onclick = (e)=>{
-        e.preventDefault();
-        clickSound.currentTime = 0;
-        clickSound.play().finally(()=>{
-            window.location.href =
-            `surah.html?id=${s.id}&name=${encodeURIComponent(s.name)}`;
+        surahs.forEach(surah => {
+            const btn = document.createElement('a');
+            btn.className = 'surah-btn';
+            btn.innerText = surah.name;
+            // إرسال البيانات للصفحة التالية
+            btn.href = `surah.html?id=${surah.id}&name=${encodeURIComponent(surah.name)}`;
+            btn.onfocus = () => clickSound.play();
+            grid.appendChild(btn);
         });
-    };
 
-    btn.onkeydown = (e)=>{
-        if(e.key === 'Enter') btn.click();
-    };
+        // التركيز التلقائي
+        window.onload = () => {
+            if(grid.children.length > 0) grid.children[0].focus();
+        };
 
-    grid.appendChild(btn);
-});
-
-window.onload = ()=>{
-    if(grid.children.length) grid.children[0].focus();
-};
-</script>
-
+        // دعم الرجوع بالريموت من زر الباك
+        document.getElementById('btnHome').addEventListener('keydown', (e) => {
+            if(e.key === 'Enter') window.location.href = 'index.html';
+        });
+    </script>
 </body>
 </html>
