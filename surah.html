@@ -1,380 +1,87 @@
 <!DOCTYPE html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المصحف المعلم - دينا</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>تلاوة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Lemonada:wght@600&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. إعدادات الصفحة والخلفية --- */
-        * { box-sizing: border-box; }
         body {
-            margin: 0;
-            padding: 0;
-            height: 100vh;
-            /* الخلفية التركوازية الجميلة */
-            background: linear-gradient(180deg, #80cbc4 0%, #26a69a 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
+            margin: 0; height: 100vh; overflow: hidden;
             font-family: 'Cairo', sans-serif;
-            overflow: hidden;
-            direction: rtl;
+            background: radial-gradient(circle at center, #1a237e 0%, #000000 100%);
+            color: white; display: flex; flex-direction: column; align-items: center;
         }
 
-        /* --- 2. الأزرار العلوية --- */
-        .top-bar {
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: 100;
+        /* العنوان */
+        .title-box {
+            margin-top: 20px; padding: 10px 40px;
+            background: rgba(255,255,255,0.1); border-radius: 50px;
+            border: 2px solid #FFD700;
+            font-family: 'Lemonada'; font-size: 1.5rem; color: #FFD700;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
         }
 
-        .top-btn {
-            background: rgba(255, 255, 255, 0.25);
-            border: 3px solid #fff;
-            width: 55px;
-            height: 55px;
-            border-radius: 50%;
-            color: #fff;
-            font-size: 26px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            text-decoration: none;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        /* منطقة دينا */
+        .dina-container {
+            flex-grow: 1; display: flex; justify-content: center; align-items: center;
+            position: relative; width: 100%;
+        }
+
+        .dina-img {
+            height: 50vh; max-height: 400px;
             transition: transform 0.2s;
-            backdrop-filter: blur(4px);
-        }
-
-        .top-btn:hover, .top-btn:focus {
-            transform: scale(1.15);
-            background: #fdd835;
-            box-shadow: 0 0 15px #fff;
-            outline: none;
-        }
-
-        /* --- 3. اللوح الخشبي (حاوية النص) --- */
-        .paper-board {
-            margin-top: 12vh;
-            width: 90%;
-            max-width: 650px;
-            height: 50vh;
-            background: #fff9c4; /* لون ورق كريمي */
-            border-radius: 30px;
-            /* إطار خشبي */
-            border: 8px solid #efebe9; 
-            outline: 6px solid #8d6e63;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.3);
-            position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 25px;
-            z-index: 10;
-        }
-
-        /* لافتة اسم السورة */
-        .title-wood-sign {
-            position: absolute;
-            top: -38px;
-            background: linear-gradient(to bottom, #ffecb3, #ffca28);
-            padding: 8px 50px;
-            border-radius: 20px;
-            border: 4px solid #fff;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            color: #5d4037;
-            font-size: 28px;
-            font-weight: 800;
-            z-index: 20;
-            text-shadow: 1px 1px 0px rgba(255,255,255,0.6);
-            white-space: nowrap;
-        }
-
-        /* منطقة النص القرآني */
-        .quran-text-area {
-            width: 100%;
-            height: 100%;
-            margin-top: 15px;
-            text-align: center;
-            font-family: 'Amiri', serif;
-            font-size: 26px;
-            color: #3e2723;
-            font-weight: bold;
-            line-height: 2.3;
-            overflow-y: auto;
-            padding: 5px 10px;
-            animation: fadeIn 0.5s ease-in;
+            filter: drop-shadow(0 0 30px rgba(255,255,255,0.2));
         }
         
-        .quran-text-area::-webkit-scrollbar { display: none; }
+        /* حركة التحدث عند التشغيل */
+        .talking { animation: bounce 0.5s infinite alternate; }
+        @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.05) translateY(-10px); } }
 
-        .ayah-num {
-            color: #d32f2f;
-            font-family: 'Cairo', sans-serif;
-            font-size: 0.8em;
-            margin: 0 5px;
-            background: rgba(255, 235, 59, 0.3);
-            padding: 0 6px;
-            border-radius: 8px;
-            border: 1px solid rgba(211, 47, 47, 0.2);
-            display: inline-block;
-        }
-        
-        .basmala {
-            display: block;
-            text-align: center;
-            font-size: 0.9em;
-            margin-bottom: 15px;
-            color: #5d4037;
+        /* أزرار التحكم */
+        .controls {
+            margin-bottom: 50px; display: flex; gap: 30px; align-items: center;
+            background: rgba(255,255,255,0.1); padding: 20px 40px;
+            border-radius: 40px; backdrop-filter: blur(10px);
         }
 
-        /* --- 4. أزرار التحكم --- */
-        .controls-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 25px;
-            margin-top: -30px;
-            z-index: 30;
-            position: relative;
+        .btn {
+            background: none; border: none; color: white; font-size: 3rem;
+            cursor: pointer; transition: 0.2s;
+        }
+        .btn:active { transform: scale(0.8); }
+        .play-btn { 
+            font-size: 4.5rem; color: #00e676; 
+            filter: drop-shadow(0 0 10px #00e676);
         }
 
-        .ctrl-btn {
-            background: linear-gradient(180deg, #ffca28 0%, #ff6f00 100%);
-            border: 4px solid #fff;
-            border-radius: 50%;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.25);
-            transition: transform 0.2s, filter 0.2s;
-            text-shadow: 0 2px 2px rgba(0,0,0,0.2);
+        .back-fixed {
+            position: absolute; top: 20px; right: 20px;
+            background: rgba(255,255,255,0.2); width: 50px; height: 50px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.5rem; color: white;
         }
-
-        .btn-play {
-            width: 90px;
-            height: 80px;
-            border-radius: 40px;
-            font-size: 35px;
-        }
-        
-        .btn-nav {
-            width: 60px;
-            height: 60px;
-            font-size: 24px;
-            background: linear-gradient(180deg, #fdd835 0%, #f9a825 100%);
-        }
-
-        .ctrl-btn:hover, .ctrl-btn:focus {
-            transform: scale(1.15);
-            filter: brightness(1.15);
-            outline: none;
-            box-shadow: 0 0 20px #ffeb3b;
-        }
-
-        /* --- 5. منطقة الشخصيات --- */
-        .characters-area {
-            position: absolute;
-            bottom: -20px;
-            width: 100%;
-            height: 38vh;
-            display: flex;
-            justify-content: center;
-            align-items: flex-end;
-            pointer-events: none;
-            z-index: 5;
-        }
-
-        .img-char {
-            height: 100%;
-            max-height: 350px;
-            object-fit: contain;
-            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.4));
-            animation: slideUp 1s cubic-bezier(0.175, 0.885, 0.32, 1.275); 
-        }
-
-        @keyframes slideUp {
-            from { transform: translateY(100%); opacity: 0; }
-            to { transform: translateY(0); opacity: 1; }
-        }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <button class="top-btn" onclick="location.reload()" title="إعادة تحميل">↻</button>
-        <a href="surah_list.html" class="top-btn" title="القائمة الرئيسية">➜</a>
+    <a href="surah_list.html" class="back-fixed">🔙</a>
+
+    <div class="title-box" id="surahName">جاري التحميل...</div>
+
+    <div class="dina-container">
+        <img src="assets/images/girl.png" id="dinaChar" class="dina-img" alt="دينا">
     </div>
 
-    <div class="paper-board">
-        <div class="title-wood-sign" id="surahNameTitle">...</div>
-
-        <div class="quran-text-area" id="quranText">
-            جاري التحميل...
-        </div>
+    <div class="controls">
+        <button class="btn" onclick="seek(-5)">⏪</button>
+        <button class="btn play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+        <button class="btn" onclick="seek(5)">⏩</button>
     </div>
 
-    <div class="controls-container">
-        <button class="ctrl-btn btn-nav" onclick="nextSurah()" title="السورة التالية">⏮</button>
-        <button class="ctrl-btn btn-play" onclick="togglePlay()" id="btnPlay">▶</button>
-        <button class="ctrl-btn btn-nav" onclick="prevSurah()" title="السورة السابقة">⏭</button>
-    </div>
+    <audio id="audioPlayer"></audio>
 
-    <div class="characters-area">
-        <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" alt="دينا" class="img-char">
-    </div>
+    <script src="script.js"></script>
 
-    <audio id="audioPlayer" preload="auto"></audio>
-
-    <script>
-        // --- بيانات السور والنص القرآني (نفس البيانات التي أرسلتها) ---
-        const quranData = {
-            78: `بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ
-عَمَّ يَتَسَآءَلُونَ (1) عَنِ ٱلنَّبَإِ ٱلۡعَظِيمِ (2) ٱلَّذِي هُمۡ فِيهِ مُخۡتَلِفُونَ (3) كَلَّا سَيَعۡلَمُونَ (4) ثُمَّ كَلَّا سَيَعۡلَمُونَ (5) أَلَمۡ نَجۡعَلِ ٱلۡأَرۡضَ مِهَٰدٗا (6) وَٱلۡجِبَالَ أَوۡتَادٗا (7) وَخَلَقۡنَٰكُمۡ أَزۡوَٰجٗا (8) وَجَعَلۡنَا نَوۡمَكُمۡ سُبَاتٗا (9) وَجَعَلۡنَا ٱلَّيۡلَ لِبَاسٗا (10) وَجَعَلۡنَا ٱلنَّهَارَ مَعَاشٗا (11) وَبَنَيۡنَا فَوۡقَكُمۡ سَبۡعٗا شِدَادٗا (12) وَجَعَلۡنَا سِرَاجٗا وَهَّاجٗا (13) وَأَنزَلۡنَا مِنَ ٱلۡمُعۡصِرَٰتِ مَآءٗ ثَجَّاجٗا (14) لِّنُخۡرِجَ بِهِۦ حَبّٗا وَنَبَاتٗا (15) وَجَنَّـٰتٍ أَلۡفَافًا (16) إِنَّ يَوۡمَ ٱلۡفَصۡلِ كَانَ مِيقَٰتٗا (17) يَوۡمَ يُنفَخُ فِي ٱلصُّورِ فَتَأۡتُونَ أَفۡوَاجٗا (18) وَفُتِحَتِ ٱلسَّمَآءُ فَكَانَتۡ أَبۡوَٰبٗا (19) وَسُيِّرَتِ ٱلۡجِبَالُ فَكَانَتۡ سَرَابًا (20) إِنَّ جَهَنَّمَ كَانَتۡ مِرۡصَادٗا (21) لِّلطَّـٰغِينَ مَـَٔابٗا (22) لَّـٰبِثِينَ فِيهَآ أَحۡقَابٗا (23) لَّا يَذُوقُونَ فِيهَا بَرۡدٗا وَلَا شَرَابًا (24) إِلَّا حَمِيمٗا وَغَسَّاقٗا (25) جَزَآءٗ وِفَاقًا (26) إِنَّهُمۡ كَانُواْ لَا يَرۡجُونَ حِسَابٗا (27) وَكَذَّبُواْ بِـَٔايَٰتِنَا كِذَّابٗا (28) وَكُلَّ شَيۡءٍ أَحۡصَيۡنَٰهُ كِتَٰبٗا (29) فَذُوقُواْ فَلَن نَّزِيدَكُمۡ إِلَّا عَذَابًا (30) إِنَّ لِلۡمُتَّقِينَ مَفَازًا (31) حَدَآئِقَ وَأَعۡنَٰبٗا (32) وَكَوَاعِبَ أَتۡرَابٗا (33) وَكَأۡسٗا دِهَاقٗا (34) لَّا يَسۡمَعُونَ فِيهَا لَغۡوٗا وَلَا كِذَّٰبٗا (35) جَزَآءٗ مِّن رَّبِّكَ عَطَآءً حِسَابٗا (36) رَّبِّ ٱلسَّمَٰوَٰتِ وَٱلۡأَرۡضِ وَمَا بَيۡنَهُمَا ٱلرَّحۡمَٰنِۖ لَا يَمۡلِكُونَ مِنۡهُ خِطَابٗا (37) يَوۡمَ يَقُومُ ٱلرُّوحُ وَٱلۡمَلَـٰٓئِكَةُ صَفّٗاۖ لَّا يَتَكَلَّمُونَ إِلَّا مَنۡ أَذِنَ لَهُ ٱلرَّحۡمَٰنُ وَقَالَ صَوَابٗا (38) ذَٰلِكَ ٱلۡيَوۡمُ ٱلۡحَقُّۖ فَمَن شَآءَ ٱتَّخَذَ إِلَىٰ رَبِّهِۦ مَـَٔابًا (39) إِنَّآ أَنذَرۡنَٰكُمۡ عَذَابٗا قَرِيبٗا يَوۡمَ يَنظُرُ ٱلۡمَرۡءُ مَا قَدَّمَتۡ يَدَاهُ وَيَقُولُ ٱلۡكَافِرُ يَٰلَيۡتَنِي كُنتُ تُرَٰبَۢا (40)`,
-            // ... (بقية السور موجودة كما هي، لم أغير البيانات) ...
-            114: `بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ
-قُلۡ أَعُوذُ بِرَبِّ ٱلنَّاسِ (1) مَلِكِ ٱلنَّاسِ (2) إِلَٰهِ ٱلنَّاسِ (3) مِن شَرِّ ٱلۡوَسۡوَاسِ ٱلۡخَنَّاسِ (4) ٱلَّذِي يُوَسۡوِسُ فِي صُدُورِ ٱلنَّاسِ (5) مِنَ ٱلۡجِنَّةِ وَٱلنَّاسِ (6)`
-        };
-
-        // باقي السور مخزنة في الذاكرة ولكن اختصرتها هنا للعرض، الكود سيعمل مع البيانات الكاملة التي عندك
-
-        // --- المتغيرات والعناصر ---
-        const urlParams = new URLSearchParams(window.location.search);
-        // التعامل بذكاء في حال لم يكن هناك رقم في الرابط
-        let currentId = parseInt(urlParams.get('id'));
-        let currentName = urlParams.get('name');
-
-        // إذا لم يأتِ رقم سورة، ابدأ بالنبأ (78)
-        if (!currentId || isNaN(currentId)) {
-            currentId = 78;
-            currentName = "النبأ";
-        }
-
-        const audioPlayer = document.getElementById('audioPlayer');
-        const quranText = document.getElementById('quranText');
-        const surahNameTitle = document.getElementById('surahNameTitle');
-        const btnPlay = document.getElementById('btnPlay');
-        let isPlaying = false;
-
-        // --- تنسيق النص القرآني ---
-        function formatQuranText(text) {
-            if (!text) return "جاري إضافة النص قريباً...";
-            let formatted = text.replace('بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ', '<span class="basmala">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ</span>');
-            formatted = formatted.replace(/\((\d+)\)/g, '<span class="ayah-num">﴿$1﴾</span>');
-            formatted = formatted.replace(/\n/g, '<br>');
-            return formatted;
-        }
-
-        // --- تحميل السورة (هنا التعديل الأهم للصوت) ---
-        function loadSurah(id, name) {
-            surahNameTitle.innerText = "سورة " + name;
-
-            // 1. تنسيق الرقم ليصبح ثلاث خانات (مثلاً 078)
-            const formattedId = id.toString().padStart(3, '0');
-            
-            // 2. استخدام رابط MP3Quran (الأسرع والأضمن)
-            // المصحف المعلم - الحصري
-            const audioUrl = `https://server13.mp3quran.net/husr/Mz/${formattedId}.mp3`;
-            
-            audioPlayer.src = audioUrl;
-
-            // 3. عرض النص
-            if (quranData[id]) {
-                quranText.innerHTML = formatQuranText(quranData[id]);
-            } else {
-                quranText.innerHTML = formatQuranText(quranData[78]); // احتياط
-            }
-        }
-
-        // --- التحكم بالصوت ---
-        function togglePlay() {
-            if (audioPlayer.paused) {
-                audioPlayer.play().then(() => {
-                    btnPlay.innerText = "⏸";
-                    isPlaying = true;
-                }).catch(err => {
-                    console.log("Autoplay prevented");
-                    // في حال منع المتصفح، المستخدم ضغط الزر بالفعل لذا سيعمل في المحاولة التالية
-                });
-            } else {
-                audioPlayer.pause();
-                btnPlay.innerText = "▶";
-                isPlaying = false;
-            }
-        }
-
-        // عند انتهاء السورة
-        audioPlayer.onended = () => {
-            btnPlay.innerText = "▶";
-            isPlaying = false;
-        };
-
-        // --- التنقل بين السور ---
-        const surahNames = {
-            78: "النبأ", 79: "النازعات", 80: "عبس", 81: "التكوير",
-            82: "الانفطار", 83: "المطففين", 84: "الانشقاق", 85: "البروج", 86: "الطارق",
-            87: "الأعلى", 88: "الغاشية", 89: "الفجر", 90: "البلد", 91: "الشمس",
-            92: "الليل", 93: "الضحى", 94: "الشرح", 95: "التين", 96: "العلق",
-            97: "القدر", 98: "البينة", 99: "الزلزلة", 100: "العاديات", 101: "القارعة",
-            102: "التكاثر", 103: "العصر", 104: "الهمزة", 105: "الفيل", 106: "قريش",
-            107: "الماعون", 108: "الكوثر", 109: "الكافرون", 110: "النصر", 111: "المسد",
-            112: "الإخلاص", 113: "الفلق", 114: "الناس"
-        };
-
-        function nextSurah() {
-            let nextId = currentId + 1;
-            if (nextId > 114) nextId = 78; 
-            updateSurah(nextId);
-        }
-
-        function prevSurah() {
-            let prevId = currentId - 1;
-            if (prevId < 78) prevId = 114;
-            updateSurah(prevId);
-        }
-
-        function updateSurah(newId) {
-            currentId = newId;
-            let name = surahNames[newId] || "السورة";
-            
-            // تحديث الرابط في المتصفح دون إعادة التحميل
-            const newUrl = `surah.html?id=${newId}&name=${encodeURIComponent(name)}`;
-            window.history.pushState({path: newUrl}, '', newUrl);
-
-            // إيقاف الصوت القديم
-            audioPlayer.pause();
-            btnPlay.innerText = "▶";
-            
-            // تحميل الجديد وتشغيله
-            loadSurah(currentId, name);
-            togglePlay();
-        }
-
-        // --- التشغيل عند البدء ---
-        window.onload = () => {
-            loadSurah(currentId, currentName);
-            // محاولة التشغيل التلقائي
-            togglePlay();
-        };
-
-        // زر الرجوع
-        document.addEventListener('keydown', function(e) {
-            if(e.key === 'Backspace' || e.key === 'Escape') {
-                window.location.href = 'surah_list.html';
-            }
-        });
-
-    </script>
 </body>
 </html>
