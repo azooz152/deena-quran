@@ -3,161 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>قائمة سور جزء عم</title>
+    <title>قائمة السور</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Lemonada:wght@600&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. الخلفية الليلية (نفس الرئيسية) --- */
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        body, html {
-            margin: 0; padding: 0; width: 100%; height: 100%;
+        /* --- التصميم الليلي الموحد --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        body {
+            margin: 0; padding: 0; min-height: 100vh;
             font-family: 'Cairo', sans-serif;
             background: radial-gradient(circle at center, #2b32b2 0%, #141e30 100%);
             color: #fff;
-            overflow-x: hidden; /* لمنع التمرير الأفقي */
+            padding-bottom: 50px;
         }
 
-        /* --- 2. الشريط العلوي --- */
+        /* --- الشريط العلوي --- */
         .header {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(20, 30, 48, 0.9);
-            backdrop-filter: blur(10px);
+            background: rgba(20, 30, 48, 0.95);
             padding: 15px 20px;
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
         .back-btn {
             background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            color: white; border: none; padding: 10px 20px;
-            border-radius: 50px; font-weight: bold; cursor: pointer;
-            text-decoration: none; font-size: 1rem;
-            box-shadow: 0 5px 15px rgba(255, 75, 43, 0.4);
-            transition: 0.3s;
-        }
-        .back-btn:hover { transform: scale(1.1); }
-
-        .page-title { font-family: 'Lemonada'; font-size: 1.2rem; color: #FFD700; }
-
-        /* --- 3. شبكة السور --- */
-        .surah-container {
-            padding: 20px; padding-bottom: 100px;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 20px;
-            max-width: 1000px; margin: 0 auto;
+            color: white; padding: 8px 20px; border-radius: 50px;
+            text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
         }
 
-        /* --- 4. بطاقة السورة الزجاجية --- */
-        .surah-card {
+        .title { font-family: 'Lemonada'; color: #FFD700; font-size: 1.2rem; }
+
+        /* --- شبكة السور --- */
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            gap: 15px; padding: 20px; max-width: 800px; margin: 0 auto;
+        }
+
+        /* --- بطاقة السورة --- */
+        .card {
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 25px;
-            padding: 20px;
-            display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; text-decoration: none; color: white;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative; overflow: hidden;
-            animation: fadeIn Up 0.5s ease forwards;
-            opacity: 0; transform: translateY(20px);
+            border-radius: 20px; padding: 15px;
+            text-align: center; cursor: pointer;
+            text-decoration: none; color: white;
+            transition: 0.3s; position: relative;
         }
 
-        /* رقم السورة */
-        .surah-num {
-            position: absolute; top: 10px; right: 10px;
-            width: 25px; height: 25px; background: rgba(0,0,0,0.3);
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            font-size: 0.8rem; color: #FFD700;
+        .card:hover, .card:focus {
+            transform: scale(1.05); background: rgba(255, 255, 255, 0.2);
+            border-color: #FFD700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
         }
 
-        .surah-icon { font-size: 3rem; margin-bottom: 10px; transition: 0.3s; }
-        .surah-name { font-size: 1.3rem; font-weight: 900; }
-
-        /* تأثيرات التفاعل (Hover/Focus) */
-        .surah-card:hover, .surah-card:focus {
-            transform: scale(1.1) translateY(-10px);
-            background: rgba(255, 255, 255, 0.2);
-            border-color: #FFD700;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 20px rgba(255, 215, 0, 0.4);
-            z-index: 10;
+        /* تمييز السور الجاهزة */
+        .ready-surah { border: 2px solid #00e676; background: rgba(0, 230, 118, 0.1); }
+        .ready-badge {
+            position: absolute; top: -10px; left: -10px;
+            background: #00e676; color: #000; font-size: 0.7rem;
+            padding: 5px 10px; border-radius: 20px; font-weight: bold;
         }
-        .surah-card:hover .surah-icon { transform: rotate(15deg) scale(1.2); }
 
-        /* ألوان مختلفة للأيقونات */
-        .surah-card:nth-child(4n+1) .surah-icon { color: #00e676; }
-        .surah-card:nth-child(4n+2) .surah-icon { color: #d500f9; }
-        .surah-card:nth-child(4n+3) .surah-icon { color: #00b0ff; }
-        .surah-card:nth-child(4n+4) .surah-icon { color: #ff9100; }
-
-        /* --- نجوم خلفية --- */
-        .star { position: fixed; background: white; border-radius: 50%; opacity: 0.5; pointer-events: none; z-index: -1; animation: twinkle 3s infinite; }
-        @keyframes twinkle { 50% { opacity: 1; transform: scale(1.5); } }
-
+        .icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
+        .name { font-size: 1.2rem; font-weight: bold; display: block; }
     </style>
 </head>
 <body>
 
-    <div id="stars-bg"></div>
-
     <div class="header">
-        <a href="index.html" class="back-btn">رجوع 🏠</a>
-        <div class="page-title">جزء عم 📖</div>
-        <div style="width: 70px;"></div>
+        <a href="index.html" class="back-btn">رجوع</a>
+        <div class="title">سور جزء عم</div>
+        <div style="width: 50px;"></div>
     </div>
 
-    <div class="surah-container" id="container">
+    <div class="grid" id="surahGrid">
         </div>
 
     <script>
-        // --- 1. قائمة السور ---
         const surahs = [
-            { id: 78, name: "النبأ" }, { id: 79, name: "النازعات" }, { id: 80, name: "عبس" },
-            { id: 81, name: "التكوير" }, { id: 82, name: "الانفطار" }, { id: 83, name: "المطففين" },
-            { id: 84, name: "الانشقاق" }, { id: 85, name: "البروج" }, { id: 86, name: "الطارق" },
-            { id: 87, name: "الأعلى" }, { id: 88, name: "الغاشية" }, { id: 89, name: "الفجر" },
-            { id: 90, name: "البلد" }, { id: 91, name: "الشمس" }, { id: 92, name: "الليل" },
-            { id: 93, name: "الضحى" }, { id: 94, name: "الشرح" }, { id: 95, name: "التين" },
-            { id: 96, name: "العلق" }, { id: 97, name: "القدر" }, { id: 98, name: "البينة" },
-            { id: 99, name: "الزلزلة" }, { id: 100, name: "العاديات" }, 
-            // السور التي رفعت لها ملفات صوتية
-            { id: 101, name: "القارعة" }, { id: 102, name: "التكاثر" }, { id: 103, name: "العصر" },
-            { id: 104, name: "الهمزة" }, 
-            { id: 105, name: "الفيل" }, { id: 106, name: "قريش" }, { id: 107, name: "الماعون" },
-            { id: 108, name: "الكوثر" }, { id: 109, name: "الكافرون" }, { id: 110, name: "النصر" },
-            { id: 111, name: "المسد" }, { id: 112, name: "الإخلاص" }, { id: 113, name: "الفلق" },
-            { id: 114, name: "الناس" }
+            { id: 101, name: "القارعة", ready: true },
+            { id: 102, name: "التكاثر", ready: true },
+            { id: 103, name: "العصر", ready: true },
+            { id: 104, name: "الهمزة", ready: true },
+            // سور أخرى للعرض فقط
+            { id: 105, name: "الفيل" }, { id: 106, name: "قريش" }, 
+            { id: 107, name: "الماعون" }, { id: 108, name: "الكوثر" },
+            { id: 112, name: "الإخلاص" }, { id: 113, name: "الفلق" }, { id: 114, name: "الناس" }
         ];
 
-        // --- 2. توليد البطاقات ---
-        const container = document.getElementById('container');
-        surahs.forEach((s, index) => {
-            const card = document.createElement('a');
-            card.className = 'surah-card';
-            // رابط الصفحة التالية مع تمرير الرقم والاسم
-            card.href = `surah.html?id=${s.id}&name=${encodeURIComponent(s.name)}`;
+        const grid = document.getElementById('surahGrid');
+
+        surahs.forEach(s => {
+            const a = document.createElement('a');
+            a.className = `card ${s.ready ? 'ready-surah' : ''}`;
+            // الرابط ينقل لصفحة المشغل مع رقم السورة
+            a.href = `surah.html?id=${s.id}&name=${encodeURIComponent(s.name)}`;
             
-            // إضافة تأخير للحركة الجمالية
-            card.style.animationDelay = (index * 0.05) + 's';
-
-            card.innerHTML = `
-                <div class="surah-num">${s.id}</div>
-                <div class="surah-icon">🌟</div>
-                <div class="surah-name">سورة ${s.name}</div>
+            let badge = s.ready ? '<span class="ready-badge">جاهز ▶</span>' : '';
+            
+            a.innerHTML = `
+                ${badge}
+                <span class="icon">🌟</span>
+                <span class="name">${s.name}</span>
             `;
-            container.appendChild(card);
+            grid.appendChild(a);
         });
-
-        // --- 3. خلفية النجوم ---
-        const starsBg = document.getElementById('stars-bg');
-        for(let i=0; i<50; i++) {
-            const star = document.createElement('div');
-            star.className = 'star';
-            star.style.left = Math.random() * 100 + 'vw';
-            star.style.top = Math.random() * 100 + 'vh';
-            star.style.width = Math.random() * 3 + 'px';
-            star.style.height = star.style.width;
-            starsBg.appendChild(star);
-        }
     </script>
 </body>
 </html>
