@@ -6,20 +6,38 @@
     <title>قائمة السور</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Lemonada:wght@600&display=swap" rel="stylesheet">
     <style>
-        /* --- التصميم الليلي الموحد --- */
+        /* --- 1. إعدادات الصفحة والخلفية المدمجة --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
             margin: 0; padding: 0; min-height: 100vh;
             font-family: 'Cairo', sans-serif;
-            background: radial-gradient(circle at center, #2b32b2 0%, #141e30 100%);
             color: #fff;
             padding-bottom: 50px;
+            
+            /* هنا السحر: دمج الصورة مع طبقة داكنة */
+            background: 
+                /* الطبقة الأولى: لون داكن شفاف لضمان قراءة النصوص */
+                linear-gradient(rgba(20, 30, 48, 0.85), rgba(10, 15, 30, 0.95)),
+                /* الطبقة الثانية: صورة دينا */
+                url('assets/bg-main.png');
+            
+            /* خصائص الصورة */
+            background-size: cover;      /* تغطية كامل الشاشة */
+            background-position: center; /* توسيط الصورة */
+            background-attachment: fixed;/* تثبيت الصورة أثناء التمرير */
+            background-repeat: no-repeat;
         }
 
-        /* --- الشريط العلوي --- */
+        /* --- 2. النجوم (تجميل إضافي فوق الصورة) --- */
+        #stars-bg { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star { position: absolute; background: white; border-radius: 50%; opacity: 0.5; animation: twinkle 3s infinite; }
+        @keyframes twinkle { 50% { opacity: 1; transform: scale(1.5); } }
+
+        /* --- 3. الشريط العلوي --- */
         .header {
             position: sticky; top: 0; z-index: 100;
-            background: rgba(20, 30, 48, 0.95);
+            background: rgba(20, 30, 48, 0.8); /* خلفية زجاجية */
+            backdrop-filter: blur(10px);
             padding: 15px 20px;
             display: flex; justify-content: space-between; align-items: center;
             box-shadow: 0 5px 20px rgba(0,0,0,0.5);
@@ -27,50 +45,61 @@
         }
 
         .back-btn {
-            background: linear-gradient(135deg, #ff416c, #ff4b2b);
-            color: white; padding: 8px 20px; border-radius: 50px;
-            text-decoration: none; font-weight: bold; box-shadow: 0 5px 15px rgba(255, 65, 108, 0.4);
+            background: rgba(255,255,255,0.1); width: 50px; height: 50px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.8rem; color: white;
+            border: 2px solid rgba(255,255,255,0.2); transition: 0.3s;
         }
+        .back-btn:hover, .back-btn:focus { background: #d32f2f; border-color: #d32f2f; transform: scale(1.1); }
 
-        .title { font-family: 'Lemonada'; color: #FFD700; font-size: 1.2rem; }
+        .title { font-family: 'Lemonada'; color: #FFD700; font-size: 1.3rem; text-shadow: 0 2px 5px rgba(0,0,0,0.5); }
 
-        /* --- شبكة السور --- */
+        /* --- 4. شبكة السور --- */
         .grid {
             display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-            gap: 15px; padding: 20px; max-width: 800px; margin: 0 auto;
+            gap: 20px; padding: 25px; max-width: 900px; margin: 0 auto; z-index: 1; position: relative;
         }
 
-        /* --- بطاقة السورة --- */
+        /* --- 5. بطاقة السورة الزجاجية --- */
         .card {
-            background: rgba(255, 255, 255, 0.1);
+            background: rgba(255, 255, 255, 0.1); /* شفافية لظهور الخلفية من تحتها */
+            backdrop-filter: blur(5px); /* تمويه خفيف للخلفية تحت البطاقة */
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px; padding: 15px;
+            border-radius: 25px; padding: 20px;
             text-align: center; cursor: pointer;
             text-decoration: none; color: white;
-            transition: 0.3s; position: relative;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            position: relative; overflow: hidden;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
         }
 
         .card:hover, .card:focus {
-            transform: scale(1.05); background: rgba(255, 255, 255, 0.2);
-            border-color: #FFD700; box-shadow: 0 0 20px rgba(255, 215, 0, 0.3);
+            transform: scale(1.1); 
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #FFD700; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 15px rgba(255, 215, 0, 0.3);
+            z-index: 10;
         }
 
         /* تمييز السور الجاهزة */
-        .ready-surah { border: 2px solid #00e676; background: rgba(0, 230, 118, 0.1); }
+        .ready-surah { border: 2px solid #00e676; background: rgba(0, 230, 118, 0.15); }
         .ready-badge {
-            position: absolute; top: -10px; left: -10px;
-            background: #00e676; color: #000; font-size: 0.7rem;
-            padding: 5px 10px; border-radius: 20px; font-weight: bold;
+            position: absolute; top: 10px; right: 10px;
+            width: 15px; height: 15px; background: #00e676; 
+            border-radius: 50%; box-shadow: 0 0 10px #00e676;
         }
 
-        .icon { font-size: 2.5rem; margin-bottom: 10px; display: block; }
-        .name { font-size: 1.2rem; font-weight: bold; display: block; }
+        .icon { font-size: 3rem; margin-bottom: 10px; display: block; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.3)); }
+        .name { font-size: 1.3rem; font-weight: 900; display: block; text-shadow: 0 2px 5px rgba(0,0,0,0.8); }
+
     </style>
 </head>
 <body>
 
+    <div id="stars-bg"></div>
+
     <div class="header">
-        <a href="index.html" class="back-btn">رجوع</a>
+        <a href="index.html" class="back-btn" tabindex="1">🏠</a>
         <div class="title">سور جزء عم</div>
         <div style="width: 50px;"></div>
     </div>
@@ -79,26 +108,45 @@
         </div>
 
     <script>
+        // السور (قمت بتحديث القائمة لتشمل السور الجديدة التي رفعتها)
         const surahs = [
+            // السور الجاهزة (mp3)
             { id: 101, name: "القارعة", ready: true },
             { id: 102, name: "التكاثر", ready: true },
             { id: 103, name: "العصر", ready: true },
             { id: 104, name: "الهمزة", ready: true },
-            // سور أخرى للعرض فقط
-            { id: 105, name: "الفيل" }, { id: 106, name: "قريش" }, 
-            { id: 107, name: "الماعون" }, { id: 108, name: "الكوثر" },
-            { id: 112, name: "الإخلاص" }, { id: 113, name: "الفلق" }, { id: 114, name: "الناس" }
+            { id: 107, name: "الماعون", ready: true },
+            { id: 109, name: "الكافرون", ready: true },
+            { id: 111, name: "المسد", ready: true },
+            
+            // باقي السور (للعرض فقط حالياً)
+            { id: 78, name: "النبأ" }, { id: 79, name: "النازعات" }, { id: 80, name: "عبس" },
+            { id: 81, name: "التكوير" }, { id: 82, name: "الانفطار" }, { id: 83, name: "المطففين" },
+            { id: 84, name: "الانشقاق" }, { id: 85, name: "البروج" }, { id: 86, name: "الطارق" },
+            { id: 87, name: "الأعلى" }, { id: 88, name: "الغاشية" }, { id: 89, name: "الفجر" },
+            { id: 90, name: "البلد" }, { id: 91, name: "الشمس" }, { id: 92, name: "الليل" },
+            { id: 93, name: "الضحى" }, { id: 94, name: "الشرح" }, { id: 95, name: "التين" },
+            { id: 96, name: "العلق" }, { id: 97, name: "القدر" }, { id: 98, name: "البينة" },
+            { id: 99, name: "الزلزلة" }, { id: 100, name: "العاديات" }, 
+            { id: 105, name: "الفيل" }, { id: 106, name: "قريش" }, { id: 108, name: "الكوثر" }, 
+            { id: 110, name: "النصر" }, { id: 112, name: "الإخلاص" }, { id: 113, name: "الفلق" },
+            { id: 114, name: "الناس" }
         ];
 
         const grid = document.getElementById('surahGrid');
 
-        surahs.forEach(s => {
+        // ترتيب السور بالتسلسل الصحيح (من 78 إلى 114) أو حسب ما تريد
+        // هنا سأقوم بترتيبها حسب رقم الـ ID تصاعدياً ليكون جزء عم مرتباً
+        surahs.sort((a, b) => a.id - b.id);
+
+        surahs.forEach((s, index) => {
             const a = document.createElement('a');
             a.className = `card ${s.ready ? 'ready-surah' : ''}`;
-            // الرابط ينقل لصفحة المشغل مع رقم السورة
-            a.href = `surah.html?id=${s.id}&name=${encodeURIComponent(s.name)}`;
-            
-            let badge = s.ready ? '<span class="ready-badge">جاهز ▶</span>' : '';
+            a.href = `surah.html?id=${s.id}`;
+            // إضافة tabindex لسهولة التنقل بالريموت
+            a.tabIndex = index + 2; 
+
+            let badge = s.ready ? '<div class="ready-badge"></div>' : '';
             
             a.innerHTML = `
                 ${badge}
@@ -107,6 +155,24 @@
             `;
             grid.appendChild(a);
         });
+
+        // نجوم الخلفية
+        const starsBg = document.getElementById('stars-bg');
+        for(let i=0; i<40; i++) {
+            const star = document.createElement('div');
+            star.className = 'star';
+            star.style.left = Math.random() * 100 + 'vw';
+            star.style.top = Math.random() * 100 + 'vh';
+            star.style.width = Math.random() * 3 + 'px';
+            star.style.height = star.style.width;
+            starsBg.appendChild(star);
+        }
+        
+        // التركيز التلقائي على أول سورة عند الفتح
+        window.onload = () => {
+             const firstCard = document.querySelector('.card');
+             if(firstCard) firstCard.focus();
+        };
     </script>
 </body>
 </html>
