@@ -4,66 +4,154 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>قرآن دينا السهيمي - الرئيسية</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <style>
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; font-family: 'Cairo', sans-serif;
-            /* تم تعديل المسار ليكون داخل مجلد assets مباشرة */
-            background: url('assets/bg-main.png') no-repeat center center fixed;
-            background-size: cover;
+            background: #80cbc4; /* لون احتياطي */
+            background: linear-gradient(180deg, #80cbc4 0%, #00796b 100%);
         }
 
-        /* حاوية الأزرار السفليّة (مثل صورتك تماماً) */
+        /* --- نظام البالونات المتحركة --- */
+        .balloon-container {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .balloon {
+            position: absolute;
+            bottom: -150px;
+            width: 50px; height: 70px;
+            border-radius: 50%;
+            opacity: 0.8;
+            animation: floatUp 15s infinite linear;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); left: var(--x-pos); }
+            100% { transform: translateY(-120vh) rotate(360deg); left: calc(var(--x-pos) + 100px); }
+        }
+
+        /* --- الشخصيات الكرتونية --- */
+        .character-box {
+            position: absolute;
+            bottom: 0; width: 100%; height: 250px;
+            display: flex; justify-content: space-around; align-items: flex-end;
+            pointer-events: none; z-index: 5;
+        }
+
+        .char {
+            height: 100%; max-height: 220px;
+            filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));
+            animation: bounce 3s infinite ease-in-out;
+        }
+        .dina-img { animation-delay: 0.2s; max-height: 250px; }
+        .bird-img { animation-delay: 0.5s; max-height: 120px; }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        /* --- حاوية الأزرار --- */
         .navigation-bar {
             position: absolute;
-            bottom: 50px;
+            bottom: 15%; /* تم رفعه قليلاً ليعطي مساحة للشخصيات */
             width: 100%;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 25px;
+            z-index: 10;
         }
 
         .nav-item {
-            width: 160px; height: 160px;
-            border-radius: 25px; border: 5px solid white;
+            width: 150px; height: 150px;
+            border-radius: 30px; border: 6px solid white;
             display: flex; flex-direction: column; align-items: center;
             justify-content: center; cursor: pointer;
-            transition: 0.3s;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.4);
         }
 
-        .nav-item:focus {
-            transform: scale(1.15);
+        .nav-item:hover, .nav-item:focus {
+            transform: scale(1.15) rotate(3deg);
             border-color: #fffb00;
             outline: none;
         }
         
-        .purple { background-color: #9b59b6; }
-        .green  { background-color: #2ecc71; }
-        .yellow { background-color: #f1c40f; }
-        .orange { background-color: #e67e22; }
+        .purple { background: linear-gradient(135deg, #9b59b6, #8e44ad); }
+        .green  { background: linear-gradient(135deg, #2ecc71, #27ae60); }
+        .yellow { background: linear-gradient(135deg, #f1c40f, #f39c12); }
+        .orange { background: linear-gradient(135deg, #e67e22, #d35400); }
+
+        .nav-text {
+            color: white; font-weight: 900; margin-top: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            font-size: 1.2rem;
+        }
     </style>
 </head>
 <body>
 
+    <div id="balloon-container" class="balloon-container"></div>
+
+    <div class="character-box">
+        <img src="assets/bird.png" class="char bird-img" alt="دحباش">
+        <img src="assets/girl.png" class="char dina-img" alt="دينا">
+        <img src="assets/rabbit.png" class="char" alt="لولو">
+    </div>
+
     <div class="navigation-bar">
         <div class="nav-item purple" tabindex="1" onclick="location.href='recordings.html'">
-            <span style="font-size:3rem">🎙️</span>
-            <span style="color:white; font-weight:bold">تسجيلاتي</span>
+            <span style="font-size:3.5rem">🎙️</span>
+            <span class="nav-text">تسجيلاتي</span>
         </div>
         <div class="nav-item green" tabindex="2" onclick="location.href='surah_list.html'">
-            <span style="font-size:3rem">📖</span>
-            <span style="color:white; font-weight:bold">جزء عم</span>
+            <span style="font-size:3.5rem">📖</span>
+            <span class="nav-text">جزء عم</span>
         </div>
         <div class="nav-item yellow" tabindex="3" onclick="location.href='azkar.html'">
-            <span style="font-size:3rem">🧘</span>
-            <span style="color:white; font-weight:bold">أذكار</span>
+            <span style="font-size:3.5rem">☀️</span>
+            <span class="nav-text">أذكار</span>
         </div>
         <div class="nav-item orange" tabindex="4" onclick="location.href='rewards.html'">
-            <span style="font-size:3rem">🏆</span>
-            <span style="color:white; font-weight:bold">مكافآتي</span>
+            <span style="font-size:3.5rem">🏆</span>
+            <span class="nav-text">مكافآتي</span>
         </div>
     </div>
+
+    <script>
+        // دالة توليد البالونات بشكل عشوائي
+        function createBalloons() {
+            const container = document.getElementById('balloon-container');
+            const colors = ['#FF5252', '#FF4081', '#E040FB', '#7C4DFF', '#536DFE', '#448AFF', '#40C4FF', '#18FFFF', '#64FFDA', '#69F0AE', '#B2FF59', '#EEFF41', '#FFFF00', '#FFD740', '#FFAB40', '#FF6E40'];
+            
+            for (let i = 0; i < 20; i++) {
+                const balloon = document.createElement('div');
+                balloon.className = 'balloon';
+                
+                // خصائص عشوائية
+                const xPos = Math.random() * 100 + 'vw';
+                const delay = Math.random() * 10 + 's';
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                const size = (Math.random() * 30 + 30) + 'px';
+                
+                balloon.style.setProperty('--x-pos', xPos);
+                balloon.style.animationDelay = delay;
+                balloon.style.backgroundColor = color;
+                balloon.style.width = size;
+                balloon.style.height = (parseInt(size) * 1.3) + 'px';
+                
+                container.appendChild(balloon);
+            }
+        }
+
+        window.onload = createBalloons;
+    </script>
 
 </body>
 </html>
