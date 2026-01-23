@@ -11,22 +11,22 @@
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; font-family: 'Cairo', sans-serif;
-            background-color: #80cbc4; /* لون احتياطي جميل */
+            /* لون خلفية احتياطي يظهر فوراً حتى لا تكون الشاشة بيضاء */
+            background-color: #81d4fa; 
         }
 
-        /* --- الحل الجذري للخلفية: صندوق ثابت --- */
-        #bg-container {
+        /* --- الحل النهائي للخلفية (بدون وسم img) --- */
+        /* استخدام div يمنع ظهور علامة الاستفهام والنص المكسور */
+        #bg-layer {
             position: fixed;
-            top: 0; 
-            left: 0; 
-            width: 100vw; 
-            height: 100vh;
-            z-index: -99; /* خلف كل شيء */
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            z-index: -999; /* خلف كل شيء */
             
-            /* هنا السحر: تحميل الصورة كخلفية وليس كعنصر */
+            /* استدعاء الصورة هنا */
             background-image: url('assets/bg-main.png');
-            background-size: cover; /* تغطية كاملة للشاشة */
-            background-position: center center; /* توسيط الصورة */
+            background-size: cover; /* ملء الشاشة */
+            background-position: center center;
             background-repeat: no-repeat;
         }
 
@@ -55,7 +55,7 @@
             width: 20vw; height: 20vw; max-width: 150px; max-height: 150px;
             border-radius: 40px; border: 6px solid white;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; background: rgba(255, 255, 255, 0.95);
+            cursor: pointer; background: rgba(255, 255, 255, 0.9);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: 0 10px 20px rgba(0,0,0,0.4);
             outline: none; -webkit-tap-highlight-color: transparent;
@@ -103,7 +103,7 @@
 </head>
 <body>
 
-    <div id="bg-container"></div>
+    <div id="bg-layer"></div>
 
     <div id="balloon-container"></div>
 
