@@ -3,22 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title> </title> <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
+    <title> </title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <style>
         /* --- إعدادات الشاشة الكاملة --- */
+        * { box-sizing: border-box; }
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; font-family: 'Cairo', sans-serif;
-            background-color: #80cbc4;
+            background-color: #80cbc4; /* لون احتياطي */
         }
 
-        /* --- حل مشكلة الخلفية: تظهر الآن على التلفاز والمتصفح --- */
-        #fixed-bg {
+        /* --- حل مشكلة الخلفية: كامل الشاشة وتعمل على التلفاز --- */
+        .bg-fixed {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            z-index: -1; object-fit: cover;
+            z-index: -5; object-fit: cover;
+            /* المسار الذي طلبته */
+            content: url('assets/bg-main.png'); 
         }
 
-        /* --- البالونات المتحركة (من الإنترنت وتفاعلية) --- */
+        /* --- البالونات المتحركة --- */
         #balloon-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1;
@@ -32,71 +36,76 @@
         }
         @keyframes floatUp { to { transform: translateY(-120vh) rotate(360deg); } }
 
-        /* --- حاوية الأزرار الرئيسية --- */
+        /* --- حاوية الأزرار --- */
         .navigation-bar {
-            position: absolute; bottom: 10%; width: 100%;
-            display: flex; justify-content: center; gap: 20px; z-index: 10;
+            position: absolute; bottom: 12%; width: 100%;
+            display: flex; justify-content: center; gap: 25px; z-index: 10;
         }
 
-        /* --- الأيقونات التفاعلية (جيلي وبوينس) --- */
+        /* --- التأثيرات التفاعلية الاحترافية 100% --- */
         .nav-item {
-            width: 22vw; height: 22vw; max-width: 140px; max-height: 140px;
-            border-radius: 35px; border: 5px solid white;
+            width: 20vw; height: 20vw; max-width: 150px; max-height: 150px;
+            border-radius: 40px; border: 6px solid white;
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; box-shadow: 0 10px 20px rgba(0,0,0,0.4);
-            transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            -webkit-tap-highlight-color: transparent; outline: none;
+            cursor: pointer; background: white;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+            outline: none; -webkit-tap-highlight-color: transparent;
         }
 
-        /* حركات التمرير والتركيز للتلفاز */
+        /* تأثير التمرير (Hover) والتركيز (Focus) للتلفاز */
         .nav-item:hover, .nav-item:focus {
-            transform: scale(1.15); border-color: #fffb00;
-            box-shadow: 0 0 30px #fffb00;
+            transform: scale(1.25) rotate(4deg);
+            border-color: #fffb00;
+            box-shadow: 0 0 40px #fffb00;
+            z-index: 20;
+            animation: bounceWobble 0.6s infinite ease-in-out;
         }
-        
-        /* تأثير الجيلي عند الضغط */
-        .nav-item:active { animation: jelly 0.5s; }
-        @keyframes jelly {
-            0%, 100% { transform: scale(1, 1); }
-            50% { transform: scale(1.1, 0.9); }
+
+        @keyframes bounceWobble {
+            0%, 100% { transform: scale(1.25) rotate(4deg); }
+            50% { transform: scale(1.25) rotate(-4deg); }
         }
+
+        /* تأثير الضغط (Active) جيلي */
+        .nav-item:active { transform: scale(0.9); }
 
         .purple { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
         .green  { background: linear-gradient(135deg, #2ecc71, #00c853); }
         .yellow { background: linear-gradient(135deg, #fbc02d, #f57f17); }
         .orange { background: linear-gradient(135deg, #ff7043, #e64a19); }
 
-        .nav-icon { font-size: 3rem; }
+        .nav-icon { font-size: 3.5rem; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
         .nav-text {
             color: white; font-weight: 900; margin-top: 5px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.5); font-size: 1.1rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5); font-size: 1.2rem;
         }
 
-        /* --- نافذة قريباً يا حلوتي --- */
+        /* --- نافذة قريباً --- */
         #popup {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.8); z-index: 1000;
             display: none; justify-content: center; align-items: center;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(8px);
         }
         .popup-card {
             background: white; padding: 40px; border-radius: 40px; text-align: center;
             border: 8px solid #fbc02d; animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
         @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
-        .popup-card h2 { font-size: 2rem; color: #e64a19; font-weight: 900; }
+        .popup-card h2 { font-size: 2.2rem; color: #e64a19; font-weight: 900; }
     </style>
 </head>
 <body>
 
-    <img src="assets/bg-main.png" id="fixed-bg" alt="">
+    <img src="assets/bg-main.png" class="bg-fixed" alt="">
 
     <div id="balloon-container"></div>
 
     <div id="popup" onclick="this.style.display='none'">
         <div class="popup-card">
-            <div style="font-size: 5rem;">💖</div>
-            <h2>قريباً ياحلوتي دينا</h2>
+            <div style="font-size: 5rem;">✨</div>
+            <h2>قريباً ياحلوتي دينا 💖</h2>
         </div>
     </div>
 
@@ -120,15 +129,14 @@
     </div>
 
     <script>
-        // دالة البالونات الاحترافية
         function createBalloons() {
             const container = document.getElementById('balloon-container');
-            const colors = ['#FF5252', '#FF4081', '#7C4DFF', '#40C4FF', '#EEFF41', '#FFAB40', '#64FFDA'];
+            const colors = ['#FF5252', '#FF4081', '#E040FB', '#7C4DFF', '#40C4FF', '#EEFF41', '#FFAB40', '#64FFDA'];
             for (let i = 0; i < 15; i++) {
                 const b = document.createElement('div');
                 b.className = 'balloon';
                 b.style.setProperty('--x', Math.random() * 95 + 'vw');
-                b.style.setProperty('--d', (Math.random() * 10 + 10) + 's');
+                b.style.setProperty('--d', (Math.random() * 8 + 8) + 's');
                 b.style.setProperty('--c', colors[Math.floor(Math.random() * colors.length)]);
                 b.style.animationDelay = (Math.random() * 5) + 's';
                 container.appendChild(b);
@@ -142,7 +150,7 @@
 
         window.onload = () => {
             createBalloons();
-            // التركيز تلقائياً على جزء عم لتسهيل التحكم بالريموت
+            // التركيز التلقائي لسهولة التحكم بالريموت
             document.querySelector('.green').focus();
         };
     </script>
