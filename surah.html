@@ -3,344 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>المصحف المعلم - دينا</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@600;800&family=Amiri:wght@700&display=swap" rel="stylesheet">
+    <title>تلاوة السورة - دينا</title>
     <style>
-        * { box-sizing: border-box; }
         body {
-            margin: 0;
-            padding: 0;
+            background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
             height: 100vh;
-            /* الخلفية التركوازية مثل الصورة المرفقة */
-            background: #26a69a; 
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Tahoma', sans-serif;
+            margin: 0;
+        }
+
+        .container-glass {
+            width: 90%;
+            height: 90vh;
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(10px);
+            border-radius: 30px;
+            border: 2px solid rgba(255, 255, 255, 0.5);
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
-            font-family: 'Cairo', sans-serif;
-            overflow: hidden;
-            direction: rtl;
+            justify-content: space-around; /* توزيع العناصر بشكل جميل */
+            position: relative;
+            padding: 20px;
         }
 
-        .top-bar {
-            width: 100%;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
+        .back-btn {
             position: absolute;
-            top: 0;
-            left: 0;
+            top: 20px;
+            right: 20px;
+            background: #ff4081;
+            color: white;
+            padding: 10px 25px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
             z-index: 100;
         }
 
-        .top-btn {
-            background: rgba(255, 255, 255, 0.3);
-            border: 2px solid #fff;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            color: #fff;
-            font-size: 24px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            text-decoration: none;
+        .surah-title {
+            font-size: 3em;
+            color: #4a148c;
+            text-shadow: 2px 2px 0px #fff;
+            margin: 0;
         }
 
-        /* اللوحة الكريمي */
-        .paper-board {
-            margin-top: 15vh;
-            width: 90%;
-            max-width: 600px;
-            height: 45vh;
-            background: #fff9c4; /* لون كريمي أصفر فاتح */
-            border-radius: 25px;
-            border: 6px solid #e0e0e0; /* إطار رمادي/أبيض */
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        .character-container {
             position: relative;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-            z-index: 10;
+            width: 250px;
+            height: 250px;
         }
 
-        /* عنوان السورة (اللافتة الصفراء) */
-        .title-sign {
-            background: #fdd835;
-            color: #3e2723;
-            padding: 8px 40px;
-            border-radius: 15px;
-            font-size: 24px;
-            font-weight: bold;
-            position: absolute;
-            top: -25px;
-            border: 3px solid #fff;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-        }
-
-        .quran-text-area {
+        .character-img {
             width: 100%;
             height: 100%;
-            margin-top: 20px;
-            text-align: center;
-            font-family: 'Amiri', serif;
-            font-size: 28px;
-            color: #000;
-            line-height: 2.2;
-            overflow-y: auto;
-            padding: 10px;
-        }
-        .quran-text-area::-webkit-scrollbar { display: none; }
-
-        .basmala {
-            display: block;
-            margin-bottom: 10px;
-            font-size: 0.9em;
-        }
-
-        .ayah-num {
-            color: #d32f2f;
-            font-size: 0.8em;
-            margin: 0 5px;
-            background: rgba(255, 213, 79, 0.4);
-            padding: 0 5px;
             border-radius: 50%;
+            border: 8px solid #fff;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            object-fit: cover;
         }
 
-        /* أزرار التحكم البرتقالية */
-        .controls-container {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 20px;
-            margin-top: -30px; /* تداخل مع اللوحة */
-            z-index: 20;
-            position: relative;
-        }
-
-        .ctrl-btn {
-            background: #ffb74d; /* برتقالي فاتح */
-            border: 4px solid #fff;
-            border-radius: 50%;
-            color: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-            transition: transform 0.1s;
-        }
-
-        .ctrl-btn:active { transform: scale(0.95); }
-
-        .btn-play {
-            width: 90px;
-            height: 90px;
-            font-size: 40px;
-            background: #ff9800; /* برتقالي أغمق للتشغيل */
-        }
-        
-        .btn-nav {
-            width: 60px;
-            height: 60px;
-            font-size: 24px;
-        }
-
-        /* صورة الشخصية */
-        .character-img {
+        /* تصميم الفم */
+        .mouth {
             position: absolute;
-            bottom: -10px;
+            bottom: 60px; /* ارفع هذا الرقم أو انقصه لضبط مكان الفم على الصورة */
             left: 50%;
             transform: translateX(-50%);
-            width: 300px;
-            max-width: 80%;
-            z-index: 5;
-            pointer-events: none;
+            width: 40px;
+            height: 5px;
+            background: #5a3030;
+            border-radius: 20px;
+            transition: height 0.1s;
         }
 
+        /* حركة الفم البسيطة (CSS Animation) */
+        @keyframes talk {
+            0% { height: 5px; }
+            50% { height: 35px; border-radius: 50%; }
+            100% { height: 5px; }
+        }
+
+        /* كلاس نضيفه بالجافاسكربت عند الكلام */
+        .talking .mouth {
+            animation: talk 0.3s infinite alternate;
+        }
+
+        .status-text {
+            font-size: 1.5em;
+            color: #fff;
+            background: rgba(0,0,0,0.2);
+            padding: 10px 30px;
+            border-radius: 20px;
+        }
+
+        /* زر تشغيل كبير يظهر فقط لو لم يعمل الصوت تلقائياً */
+        #manualPlayBtn {
+            display: none;
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            font-size: 2em;
+            border-radius: 20px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            margin-top: 20px;
+        }
     </style>
 </head>
 <body>
 
-    <div class="top-bar">
-        <button class="top-btn" onclick="location.reload()">↻</button>
-        <a href="surah_list.html" class="top-btn">➜</a>
+    <a href="surah_list.html" class="back-btn">رجوع</a>
+
+    <div class="container-glass">
+        
+        <h1 class="surah-title" id="titleDisplay">...</h1>
+
+        <div class="character-container" id="characterBox">
+            <img src="https://cdn-icons-png.flaticon.com/512/4140/4140048.png" class="character-img" alt="Character">
+            <div class="mouth"></div>
+        </div>
+
+        <p class="status-text" id="statusText">جاري التجهيز...</p>
+        
+        <button id="manualPlayBtn" onclick="startAudio()">▶ اضغط للتشغيل</button>
+
+        <audio id="quranAudio"></audio>
+
     </div>
-
-    <div class="paper-board">
-        <div class="title-sign" id="surahNameTitle">...</div>
-        <div class="quran-text-area" id="quranText"></div>
-    </div>
-
-    <div class="controls-container">
-        <button class="ctrl-btn btn-nav" onclick="nextSurah()">⏮</button>
-        <button class="ctrl-btn btn-play" onclick="togglePlay()" id="btnPlay">▶</button>
-        <button class="ctrl-btn btn-nav" onclick="prevSurah()">⏭</button>
-    </div>
-
-    <img src="assets/images/girl.png" alt="Character" class="character-img">
-
-    <audio id="audioPlayer" preload="auto"></audio>
 
     <script>
-        // --- 1. روابط الصوت (القائمة التي طلبتها بالضبط) ---
-        const audioSources = {
-            78: "https://surahquran.com/mp3/Minshawi-with-kids/78.mp3",
-            79: "https://surahquran.com/mp3/Minshawi-with-kids/79.mp3",
-            80: "https://surahquran.com/mp3/Minshawi-with-kids/80.mp3",
-            81: "https://surahquran.com/mp3/Minshawi-with-kids/81.mp3",
-            82: "https://surahquran.com/mp3/Minshawi-with-kids/82.mp3",
-            83: "https://surahquran.com/mp3/Minshawi-with-kids/83.mp3",
-            84: "https://surahquran.com/mp3/Minshawi-with-kids/84.mp3",
-            85: "https://surahquran.com/mp3/Minshawi-with-kids/85.mp3",
-            86: "https://surahquran.com/mp3/Minshawi-with-kids/86.mp3",
-            87: "https://surahquran.com/mp3/Minshawi-with-kids/87.mp3",
-            88: "https://surahquran.com/mp3/Minshawi-with-kids/88.mp3",
-            89: "https://surahquran.com/mp3/Minshawi-with-kids/89.mp3",
-            90: "https://surahquran.com/mp3/Minshawi-with-kids/90.mp3",
-            91: "https://surahquran.com/mp3/Minshawi-with-kids/91.mp3",
-            92: "https://surahquran.com/mp3/Minshawi-with-kids/92.mp3",
-            93: "https://surahquran.com/mp3/Minshawi-with-kids/93.mp3",
-            94: "https://surahquran.com/mp3/Minshawi-with-kids/94.mp3",
-            95: "https://surahquran.com/mp3/Minshawi-with-kids/95.mp3",
-            96: "https://surahquran.com/mp3/Minshawi-with-kids/96.mp3",
-            97: "https://surahquran.com/mp3/Minshawi-with-kids/97.mp3",
-            98: "https://surahquran.com/mp3/Minshawi-with-kids/98.mp3",
-            99: "https://surahquran.com/mp3/Minshawi-with-kids/99.mp3",
-            100: "https://surahquran.com/mp3/Minshawi-with-kids/100.mp3",
-            101: "https://surahquran.com/mp3/Minshawi-with-kids/101.mp3",
-            102: "https://surahquran.com/mp3/Minshawi-with-kids/102.mp3",
-            103: "https://surahquran.com/mp3/Minshawi-with-kids/103.mp3",
-            104: "https://surahquran.com/mp3/Minshawi-with-kids/104.mp3",
-            105: "https://surahquran.com/mp3/Minshawi-with-kids/105.mp3",
-            106: "https://surahquran.com/mp3/Minshawi-with-kids/106.mp3",
-            107: "https://surahquran.com/mp3/Minshawi-with-kids/107.mp3",
-            108: "https://surahquran.com/mp3/Minshawi-with-kids/108.mp3",
-            109: "https://surahquran.com/mp3/Minshawi-with-kids/109.mp3",
-            110: "https://surahquran.com/mp3/Minshawi-with-kids/110.mp3",
-            111: "https://surahquran.com/mp3/Minshawi-with-kids/111.mp3",
-            112: "https://surahquran.com/mp3/Minshawi-with-kids/112.mp3",
-            113: "https://surahquran.com/mp3/Minshawi-with-kids/113.mp3",
-            114: "https://surahquran.com/mp3/Minshawi-with-kids/114.mp3"
-        };
-
-        const surahNames = {
-            78: "النبأ", 79: "النازعات", 80: "عبس", 81: "التكوير", 82: "الانفطار", 83: "المطففين", 84: "الانشقاق", 85: "البروج", 86: "الطارق", 87: "الأعلى", 88: "الغاشية", 89: "الفجر", 90: "البلد", 91: "الشمس", 92: "الليل", 93: "الضحى", 94: "الشرح", 95: "التين", 96: "العلق", 97: "القدر", 98: "البينة", 99: "الزلزلة", 100: "العاديات", 101: "القارعة", 102: "التكاثر", 103: "العصر", 104: "الهمزة", 105: "الفيل", 106: "قريش", 107: "الماعون", 108: "الكوثر", 109: "الكافرون", 110: "النصر", 111: "المسد", 112: "الإخلاص", 113: "الفلق", 114: "الناس"
-        };
-
-        // --- 2. بيانات النص (جزء من البيانات للحجم، يفضل وضع كامل النص هنا) ---
-        // ملاحظة: تأكد من نسخ كود النصوص quranData كاملاً كما في المرات السابقة هنا
-        // سأضع كود الاستدعاء ليعمل الكود بشكل صحيح
-        const quranData = {
-            78: `بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ\nعَمَّ يَتَسَآءَلُونَ (1) عَنِ ٱلنَّبَإِ ٱلۡعَظِيمِ (2) ... (يرجى نسخ النص الكامل هنا) ...`,
-            // ... (ضع باقي النصوص هنا كما كانت في الكود السابق) ...
-            80: `بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ\nعَبَسَ وَتَوَلَّىٰٓ (1) أَن جَآءَهُ ٱلۡأَعۡمَىٰ (2) ...`
-        };
-
-        // --- تهيئة الصفحة ---
+        // 1. جلب رقم السورة من الرابط
         const urlParams = new URLSearchParams(window.location.search);
-        let currentId = parseInt(urlParams.get('id')) || 78; 
+        let surahId = urlParams.get('id'); 
+        let surahName = urlParams.get('name');
+
+        if (!surahId) {
+            // بيانات تجريبية لو فتحت الصفحة بدون رابط
+            surahId = "1";
+            surahName = "الفاتحة";
+        }
+
+        document.getElementById('titleDisplay').innerText = "سورة " + surahName;
+
+        // 2. ضبط الرقم (إضافة أصفار: 1 -> 001)
+        const formattedId = surahId.toString().padStart(3, '0');
+
+        // 3. رابط الصوت المباشر (سريع جداً)
+        const audioUrl = `https://server13.mp3quran.net/husr/Mz/${formattedId}.mp3`;
         
-        const audioPlayer = document.getElementById('audioPlayer');
-        const quranText = document.getElementById('quranText');
-        const surahNameTitle = document.getElementById('surahNameTitle');
-        const btnPlay = document.getElementById('btnPlay');
-        let isPlaying = false;
+        const audio = document.getElementById('quranAudio');
+        const statusText = document.getElementById('statusText');
+        const charBox = document.getElementById('characterBox');
+        const playBtn = document.getElementById('manualPlayBtn');
 
-        function formatText(text) {
-            if (!text) return "جاري تحميل النص...";
-            let formatted = text.replace('بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ', '<span class="basmala">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ</span>');
-            formatted = formatted.replace(/\((\d+)\)/g, '<span class="ayah-num">﴿$1﴾</span>');
-            formatted = formatted.replace(/\n/g, '<br>');
-            return formatted;
+        audio.src = audioUrl;
+
+        // دالة التشغيل
+        function startAudio() {
+            playBtn.style.display = 'none'; // إخفاء الزر
+            audio.play().then(() => {
+                // نجح التشغيل
+                statusText.innerText = "▶ يقرأ الآن...";
+            }).catch(error => {
+                // منع المتصفح التشغيل التلقائي
+                console.log("Autoplay blocked, showing button");
+                statusText.innerText = "الرجاء الضغط على الزر أدناه";
+                playBtn.style.display = 'block'; // إظهار زر التشغيل اليدوي
+            });
         }
 
-        function loadSurah(id) {
-            const name = surahNames[id];
-            surahNameTitle.innerText = "سورة " + name;
-
-            // تحديث الرابط في المتصفح
-            const newUrl = `surah.html?id=${id}&name=${encodeURIComponent(name)}`;
-            window.history.pushState({path: newUrl}, '', newUrl);
-
-            // 1. تحميل النص
-            // (استخدم المتغير quranData الكامل الذي لديك)
-            // سأقوم بجلب النص بشكل افتراضي إذا لم يكن موجوداً للتجربة
-            if (quranData[id]) {
-                quranText.innerHTML = formatText(quranData[id]);
-            } else {
-                 // في حال نسيت نسخ كائن النصوص، سنعرض رسالة
-                quranText.innerHTML = formatText(`بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ\nسورة ${name} جاهزة للاستماع`);
-            }
-
-            // 2. تحميل الصوت (الخطوة الأهم)
-            const audioUrl = audioSources[id];
-            if (audioUrl) {
-                audioPlayer.src = audioUrl;
-                audioPlayer.load();
-                console.log("تم تحميل الرابط:", audioUrl);
-            } else {
-                alert("لا يوجد رابط صوتي لهذه السورة");
-            }
-        }
-
-        function togglePlay() {
-            if (audioPlayer.paused) {
-                const playPromise = audioPlayer.play();
-                if (playPromise !== undefined) {
-                    playPromise.then(_ => {
-                        btnPlay.innerText = "⏸";
-                        isPlaying = true;
-                    }).catch(error => {
-                        console.error(error);
-                        // هذا التنبيه سيظهر لو كان هناك مشكلة حقيقية في الرابط
-                        alert("عذراً، الرابط الصوتي لا يعمل أو تم حظره من المصدر. حاول مرة أخرى.");
-                    });
-                }
-            } else {
-                audioPlayer.pause();
-                btnPlay.innerText = "▶";
-                isPlaying = false;
-            }
-        }
-
-        // عند انتهاء السورة
-        audioPlayer.onended = () => {
-            btnPlay.innerText = "▶";
-            isPlaying = false;
-        };
-        
-        // عند حدوث خطأ في تحميل الملف
-        audioPlayer.onerror = () => {
-             alert("حدث خطأ في تحميل ملف الصوت من المصدر surahquran.com");
+        // 4. التحكم في حركة الفم (بسيط ومضمون)
+        // عندما يبدأ الصوت -> شغّل حركة الفم
+        audio.onplay = () => {
+            charBox.classList.add('talking');
+            statusText.innerText = "▶ يقرأ الآن...";
         };
 
-        function nextSurah() {
-            let next = currentId + 1;
-            if (next > 114) next = 78;
-            currentId = next;
-            stopAndLoad();
-        }
-
-        function prevSurah() {
-            let prev = currentId - 1;
-            if (prev < 78) prev = 114;
-            currentId = prev;
-            stopAndLoad();
-        }
-
-        function stopAndLoad() {
-            audioPlayer.pause();
-            btnPlay.innerText = "▶";
-            loadSurah(currentId);
-        }
-
-        // التشغيل عند الفتح
-        window.onload = () => {
-            loadSurah(currentId);
+        // عندما يتوقف الصوت أو ينتهي -> أوقف الفم
+        audio.onpause = () => {
+            charBox.classList.remove('talking');
+            statusText.innerText = "⏸ متوقف مؤقتاً";
         };
+
+        audio.onended = () => {
+            charBox.classList.remove('talking');
+            statusText.innerText = "✅ انتهت السورة";
+            // رجوع تلقائي بعد 3 ثواني
+            setTimeout(() => window.location.href = 'surah_list.html', 3000);
+        };
+
+        // محاولة التشغيل التلقائي عند فتح الصفحة
+        window.onload = startAudio;
 
     </script>
 </body>
