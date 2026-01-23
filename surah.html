@@ -3,85 +3,300 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تلاوة</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Lemonada:wght@600&display=swap" rel="stylesheet">
+    <title>تلاوة ممتعة</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@700;900&family=Lemonada:wght@500&display=swap" rel="stylesheet">
     <style>
+        /* --- 1. إعدادات الصفحة (الخلفية الليلية) --- */
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            margin: 0; height: 100vh; overflow: hidden;
+            margin: 0; padding: 0; height: 100vh; overflow: hidden;
             font-family: 'Cairo', sans-serif;
-            background: radial-gradient(circle at center, #1a237e 0%, #000000 100%);
-            color: white; display: flex; flex-direction: column; align-items: center;
+            background: radial-gradient(circle at center, #2b32b2 0%, #141e30 100%);
+            display: flex; flex-direction: column; align-items: center;
+            color: white;
         }
 
-        /* العنوان */
-        .title-box {
-            margin-top: 20px; padding: 10px 40px;
-            background: rgba(255,255,255,0.1); border-radius: 50px;
-            border: 2px solid #FFD700;
-            font-family: 'Lemonada'; font-size: 1.5rem; color: #FFD700;
-            text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        /* --- 2. نجوم الخلفية --- */
+        #stars { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
+        .star {
+            position: absolute; background: white; border-radius: 50%; opacity: 0.6;
+            animation: twinkle var(--d) infinite;
+        }
+        @keyframes twinkle { 50% { opacity: 1; transform: scale(1.3); } }
+
+        /* --- 3. زر الرجوع --- */
+        .header {
+            width: 100%; padding: 15px 20px; z-index: 10;
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .back-btn {
+            background: rgba(255, 255, 255, 0.2); width: 45px; height: 45px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            text-decoration: none; font-size: 1.5rem; color: white;
+            border: 2px solid rgba(255,255,255,0.3); transition: 0.3s;
+        }
+        .back-btn:active { transform: scale(0.9); background: rgba(255,0,0,0.4); }
+
+        /* --- 4. بطاقة القراءة السحرية --- */
+        .quran-card {
+            background: linear-gradient(to bottom, #fff9c4, #fff59d);
+            width: 92%; max-width: 650px; height: 58%;
+            margin-top: 5px; border-radius: 35px;
+            border: 6px solid #fff;
+            box-shadow: 
+                0 0 30px rgba(255, 215, 0, 0.3), /* توهج خارجي */
+                inset 0 0 50px rgba(255, 235, 59, 0.2); /* توهج داخلي */
+            display: flex; flex-direction: column; align-items: center;
+            position: relative; overflow: hidden; z-index: 5;
+            user-select: none; pointer-events: none; /* منع النقر داخل النص */
         }
 
-        /* منطقة دينا */
-        .dina-container {
-            flex-grow: 1; display: flex; justify-content: center; align-items: center;
-            position: relative; width: 100%;
+        /* شريط العنوان */
+        .surah-title-badge {
+            background: linear-gradient(135deg, #ff6f00, #ffca28);
+            padding: 10px 45px; border-radius: 0 0 25px 25px;
+            color: white; font-weight: 900; font-size: 1.3rem;
+            font-family: 'Lemonada', sans-serif;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            margin-bottom: 15px; z-index: 10; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
-        .dina-img {
-            height: 50vh; max-height: 400px;
-            transition: transform 0.2s;
-            filter: drop-shadow(0 0 30px rgba(255,255,255,0.2));
+        /* حاوية النص */
+        .quran-text-container {
+            font-family: 'Amiri', serif; color: #4e342e;
+            font-size: 1.5rem; line-height: 2.6; text-align: center;
+            padding: 10px 25px 50px 25px;
+            overflow-y: auto; width: 100%; flex-grow: 1;
+            scroll-behavior: smooth; /* تمرير ناعم */
+            /* إخفاء شريط التمرير */
+            scrollbar-width: none; -ms-overflow-style: none;
         }
-        
-        /* حركة التحدث عند التشغيل */
-        .talking { animation: bounce 0.5s infinite alternate; }
-        @keyframes bounce { from { transform: scale(1); } to { transform: scale(1.05) translateY(-10px); } }
+        .quran-text-container::-webkit-scrollbar { display: none; }
 
-        /* أزرار التحكم */
+        .basmalah { display: block; margin-bottom: 20px; opacity: 0.7; font-size: 1.3rem;}
+
+        /* --- 5. التأثيرات الخرافية للآيات --- */
+        .verse {
+            display: inline-block; /* لجعل كل آية كتلة مستقلة */
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+            padding: 5px 10px;
+            border-radius: 15px;
+            margin: 2px;
+        }
+
+        /* الكلاس السحري للآية النشطة */
+        .verse-active {
+            color: #d84315; /* لون برتقالي غامق للنص */
+            font-weight: 900;
+            font-size: 1.7rem; /* تكبير الخط قليلاً */
+            background: rgba(255, 235, 59, 0.5); /* خلفية مضيئة خلف الآية */
+            box-shadow: 0 0 20px rgba(255, 193, 7, 0.6); /* توهج حول الآية */
+            transform: scale(1.05); /* تكبير الحجم */
+            text-shadow: 1px 1px 1px #fff, 0 0 5px #ffeb3b; /* ظلال للنص */
+            animation: pulseVerse 1.5s infinite alternate; /* نبض مستمر */
+        }
+
+        @keyframes pulseVerse {
+            from { box-shadow: 0 0 15px rgba(255, 193, 7, 0.5); }
+            to { box-shadow: 0 0 30px rgba(255, 193, 7, 0.8), 0 0 10px rgba(255, 87, 34, 0.4); }
+        }
+
+        /* --- 6. منطقة دينا والتحكم --- */
+        .bottom-area {
+            flex-grow: 1; width: 100%; position: relative;
+            display: flex; flex-direction: column; justify-content: flex-end; align-items: center;
+            padding-bottom: 25px; z-index: 20;
+        }
+
+        .dina-char {
+            width: 170px; position: absolute; bottom: 5px; left: 5%;
+            filter: drop-shadow(0 0 20px rgba(255,255,255,0.3));
+            transition: transform 0.3s; pointer-events: none;
+        }
+        .talking { animation: bounceChar 0.5s infinite alternate cubic-bezier(0.45, 0.05, 0.55, 0.95); }
+        @keyframes bounceChar { to { transform: translateY(-12px) scale(1.03) rotate(2deg); } }
+
+        /* أزرار التحكم الاحترافية */
         .controls {
-            margin-bottom: 50px; display: flex; gap: 30px; align-items: center;
-            background: rgba(255,255,255,0.1); padding: 20px 40px;
-            border-radius: 40px; backdrop-filter: blur(10px);
+            display: flex; gap: 25px; align-items: center;
+            background: rgba(20, 30, 48, 0.8); padding: 12px 35px;
+            border-radius: 50px; backdrop-filter: blur(15px);
+            border: 3px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            margin-bottom: 20px; margin-left: 70px;
         }
 
         .btn {
-            background: none; border: none; color: white; font-size: 3rem;
-            cursor: pointer; transition: 0.2s;
+            width: 65px; height: 65px; border-radius: 50%; border: none;
+            font-size: 1.8rem; color: white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            outline: none; -webkit-tap-highlight-color: transparent;
         }
-        .btn:active { transform: scale(0.8); }
-        .play-btn { 
-            font-size: 4.5rem; color: #00e676; 
-            filter: drop-shadow(0 0 10px #00e676);
+        
+        .play-btn {
+            background: linear-gradient(135deg, #ffb300, #ff6f00);
+            width: 85px; height: 85px; font-size: 2.8rem;
+            box-shadow: 0 5px 20px rgba(255, 111, 0, 0.5);
+        }
+        .nav-btn, .repeat-btn {
+            background: rgba(255,255,255,0.15); font-size: 1.6rem;
+            border: 2px solid rgba(255,255,255,0.1);
         }
 
-        .back-fixed {
-            position: absolute; top: 20px; right: 20px;
-            background: rgba(255,255,255,0.2); width: 50px; height: 50px;
-            border-radius: 50%; display: flex; align-items: center; justify-content: center;
-            text-decoration: none; font-size: 1.5rem; color: white;
-        }
+        .btn:hover { transform: scale(1.1); background: rgba(255,255,255,0.3); }
+        .play-btn:hover { transform: scale(1.1) rotate(5deg); box-shadow: 0 0 30px rgba(255, 193, 7, 0.8); }
+        .btn:active { transform: scale(0.9); }
+
+        .repeat-active { background: #00e676 !important; color: #004d40; border-color: white; box-shadow: 0 0 20px #00e676; }
+
     </style>
 </head>
 <body>
 
-    <a href="surah_list.html" class="back-fixed">🔙</a>
+    <div id="stars"></div>
+    <div class="header"><a href="surah_list.html" class="back-btn">🔙</a></div>
 
-    <div class="title-box" id="surahName">جاري التحميل...</div>
-
-    <div class="dina-container">
-        <img src="assets/images/girl.png" id="dinaChar" class="dina-img" alt="دينا">
+    <div class="quran-card">
+        <div class="surah-title-badge" id="titleDisplay">سورة ...</div>
+        <div class="quran-text-container" id="textContainer">
+            </div>
     </div>
 
-    <div class="controls">
-        <button class="btn" onclick="seek(-5)">⏪</button>
-        <button class="btn play-btn" id="playBtn" onclick="togglePlay()">▶</button>
-        <button class="btn" onclick="seek(5)">⏩</button>
+    <div class="bottom-area">
+        <img src="assets/images/girl.png" class="dina-char" id="dinaImg" alt="دينا">
+        <div class="controls">
+            <button class="btn repeat-btn" id="loopBtn" onclick="toggleLoop()">🔁</button>
+            <button class="btn nav-btn" onclick="seek(-5)">⏪</button>
+            <button class="btn play-btn" id="playBtn" onclick="togglePlay()">▶</button>
+            <button class="btn nav-btn" onclick="seek(5)">⏩</button>
+        </div>
     </div>
 
     <audio id="audioPlayer"></audio>
 
-    <script src="script.js"></script>
+    <script>
+        // --- 1. قاعدة البيانات (تم تعديلها لتكون مصفوفة من الآيات) ---
+        // ملاحظة: هذا نظام محاكاة، سأقوم بوضع الآيات بشكل منفصل لكي يعمل التظليل.
+        const quranData = {
+            101: { name: "القارعة", verses: [
+                "ٱلۡقَارِعَةُ (1)", "مَا ٱلۡقَارِعَةُ (2)", "وَمَآ أَدۡرَىٰكَ مَا ٱلۡقَارِعَةُ (3)", "يَوۡمَ يَكُونُ ٱلنَّاسُ كَٱلۡفَرَاشِ ٱلۡمَبۡثُوثِ (4)", "وَتَكُونُ ٱلۡجِبَالُ كَٱلۡعِهۡنِ ٱلۡمَنفُوشِ (5)", "فَأَمَّا مَن ثَقُلَتۡ مَوَٰزِينُهُۥ (6)", "فَهُوَ فِي عِيشَةٖ رَّاضِيَةٖ (7)", "وَأَمَّا مَنۡ خَفَّتۡ مَوَٰزِينُهُۥ (8)", "فَأُمُّهُۥ هَاوِيَةٞ (9)", "وَمَآ أَدۡرَىٰكَ مَا هِيَهۡ (10)", "نَارٌ حَامِيَةُۢ (11)"
+            ]},
+            102: { name: "التكاثر", verses: [
+                "أَلۡهَىٰكُمُ ٱلتَّكَاثُرُ (1)", "حَتَّىٰ زُرۡتُمُ ٱلۡمَقَابِرَ (2)", "كَلَّا سَوۡفَ تَعۡلَمُونَ (3)", "ثُمَّ كَلَّا سَوۡفَ تَعۡلَمُونَ (4)", "كَلَّا لَوۡ تَعۡلَمُونَ عِلۡمَ ٱلۡيَقِينِ (5)", "لَتَرَوُنَّ ٱلۡجَحِيمَ (6)", "ثُمَّ لَتَرَوُنَّهَا عَيۡنَ ٱلۡيَقِينِ (7)", "ثُمَّ لَتُسۡـَٔلُنَّ يَوۡمَئِذٍ عَنِ ٱلنَّعِيمِ (8)"
+            ]},
+            103: { name: "العصر", verses: [
+                "وَٱلۡعَصۡرِ (1)", "إِنَّ ٱلۡإِنسَٰنَ لَفِي خُسۡرٍ (2)", "إِلَّا ٱلَّذِينَ ءَامَنُواْ وَعَمِلُواْ ٱلصَّـٰلِحَٰتِ وَتَوَاصَوۡاْ بِٱلۡحَقِّ وَتَوَاصَوۡاْ بِٱلصَّبۡرِ (3)"
+            ]},
+            104: { name: "الهمزة", verses: [
+                "وَيۡلٞ لِّكُلِّ هُمَزَةٖ لُّمَزَةٍ (1)", "ٱلَّذِي جَمَعَ مَالٗا وَعَدَّدَهُۥ (2)", "يَحۡسَبُ أَنَّ مَالَهُۥٓ أَخۡلَدَهُۥ (3)", "كَلَّاۖ لَيُنۢبَذَنَّ فِي ٱلۡحُطَمَةِ (4)", "وَمَآ أَدۡرَىٰكَ مَا ٱلۡحُطَمَةُ (5)", "نَارُ ٱللَّهِ ٱلۡمُوقَدَةُ (6)", "ٱلَّتِي تَطَّلِعُ عَلَى ٱلۡأَفۡـِٔدَةِ (7)", "إِنَّهَا عَلَيۡهِم مُّؤۡصَدَةٞ (8)", "فِي عَمَدٖ مُّمَدَّدَةِۢ (9)"
+            ]},
+            // ... يمكن إضافة باقي السور بنفس الطريقة (مصفوفة آيات) ...
+            // كمثال لسورة طويلة:
+            78: { name: "النبأ", verses: ["عَمَّ يَتَسَآءَلُونَ (1)", "عَنِ ٱلنَّبَإِ ٱلۡعَظِيمِ (2)", "ٱلَّذِي هُمۡ فِيهِ مُخۡتَلِفُونَ (3)", "كَلَّا سَيَعۡلَمُونَ (4)", "(سيتم إكمال الباقي لاحقاً)..."] }
+        };
 
+        // --- المنطق البرمجي ---
+        const urlParams = new URLSearchParams(window.location.search);
+        const id = urlParams.get('id');
+        
+        const audio = document.getElementById('audioPlayer');
+        const playBtn = document.getElementById('playBtn');
+        const dinaImg = document.getElementById('dinaImg');
+        const titleDisplay = document.getElementById('titleDisplay');
+        const textContainer = document.getElementById('textContainer');
+        const loopBtn = document.getElementById('loopBtn');
+
+        let currentVersesElements = [];
+
+        // تحميل البيانات وبناء النص
+        if (quranData[id]) {
+            titleDisplay.innerText = "سورة " + quranData[id].name;
+            audio.src = `${id}.mp3`;
+            
+            // بناء الآيات داخل عناصر span منفصلة
+            let htmlContent = '<span class="basmalah">بِسۡمِ ٱللَّهِ ٱلرَّحۡمَٰنِ ٱلرَّحِيمِ</span>';
+            quranData[id].verses.forEach((verseText, index) => {
+                htmlContent += `<span class="verse" id="verse-${index}">${verseText} </span>`;
+            });
+            textContainer.innerHTML = htmlContent;
+            // حفظ مراجع العناصر للوصول السريع
+            currentVersesElements = Array.from(textContainer.getElementsByClassName('verse'));
+
+        } else {
+            titleDisplay.innerText = "السورة غير متوفرة";
+            textContainer.innerHTML = "<p>سيتم إضافتها قريباً...</p>";
+        }
+
+        // --- نظام المحاكاة السحرية للتزامن (Magic Sync Simulation) ---
+        audio.ontimeupdate = () => {
+            if (!audio.duration || currentVersesElements.length === 0) return;
+
+            // حساب نسبة التقدم في الصوت (من 0.0 إلى 1.0)
+            const progress = audio.currentTime / audio.duration;
+            // تحديد مؤشر الآية الحالية بناءً على النسبة
+            let activeIndex = Math.floor(progress * currentVersesElements.length);
+            // التأكد من عدم تجاوز آخر آية
+            activeIndex = Math.min(activeIndex, currentVersesElements.length - 1);
+
+            // إزالة التظليل عن الجميع
+            currentVersesElements.forEach(el => el.classList.remove('verse-active'));
+            
+            // إضافة التظليل السحري للآية الحالية
+            if (currentVersesElements[activeIndex]) {
+                const activeVerse = currentVersesElements[activeIndex];
+                activeVerse.classList.add('verse-active');
+                
+                // التمرير التلقائي السلس لمنتصف الشاشة
+                activeVerse.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        };
+
+        // التحكم في التشغيل
+        function togglePlay() {
+            if (audio.paused) {
+                audio.play();
+                playBtn.innerText = "⏸";
+                dinaImg.classList.add('talking');
+            } else {
+                audio.pause();
+                playBtn.innerText = "▶";
+                dinaImg.classList.remove('talking');
+            }
+        }
+
+        // التكرار
+        function toggleLoop() {
+            audio.loop = !audio.loop;
+            loopBtn.classList.toggle('repeat-active', audio.loop);
+        }
+
+        // تقديم وتأخير
+        function seek(seconds) { audio.currentTime += seconds; }
+
+        // عند انتهاء الصوت
+        audio.onended = () => {
+            if(!audio.loop) {
+                playBtn.innerText = "▶";
+                dinaImg.classList.remove('talking');
+                // إزالة التظليل عند الانتهاء
+                currentVersesElements.forEach(el => el.classList.remove('verse-active'));
+                textContainer.scrollTo({ top: 0, behavior: 'smooth' }); // العودة للبداية
+            }
+        };
+
+        // نجوم الخلفية
+        const stars = document.getElementById('stars');
+        for(let i=0; i<60; i++) {
+            const s = document.createElement('div');
+            s.className = 'star';
+            s.style.left = Math.random()*100 + '%';
+            s.style.top = Math.random()*100 + '%';
+            s.style.width = Math.random()*3 + 'px';
+            s.style.height = s.style.width;
+            s.style.setProperty('--d', (Math.random()*3+2)+'s');
+            stars.appendChild(s);
+        }
+    </script>
 </body>
 </html>
