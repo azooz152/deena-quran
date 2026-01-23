@@ -6,29 +6,34 @@
     <title> </title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. إعدادات الصفحة (هام: بدون لون خلفية) --- */
+        /* --- إعدادات الصفحة --- */
         * { box-sizing: border-box; }
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; font-family: 'Cairo', sans-serif;
-            background: transparent; /* جعل الخلفية شفافة لتظهر الصورة */
+            background-color: #80cbc4; /* لون احتياطي جميل */
         }
 
-        /* --- 2. صورة الخلفية (الطبقة رقم 0) --- */
-        /* هذا الكود يضمن بقاء الصورة أمام أعيننا ولن تختفي خلف الصفحة */
-        #bg-image {
+        /* --- الحل الجذري للخلفية: صندوق ثابت --- */
+        #bg-container {
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: 0; /* الطبقة الأساسية */
-            object-fit: cover; /* تغطية كامل الشاشة */
+            top: 0; 
+            left: 0; 
+            width: 100vw; 
+            height: 100vh;
+            z-index: -99; /* خلف كل شيء */
+            
+            /* هنا السحر: تحميل الصورة كخلفية وليس كعنصر */
+            background-image: url('assets/bg-main.png');
+            background-size: cover; /* تغطية كاملة للشاشة */
+            background-position: center center; /* توسيط الصورة */
+            background-repeat: no-repeat;
         }
 
-        /* --- 3. البالونات (الطبقة رقم 1) --- */
+        /* --- البالونات المتحركة --- */
         #balloon-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            pointer-events: none; 
-            z-index: 1; /* فوق الخلفية */
+            pointer-events: none; z-index: 1;
         }
         .balloon {
             position: absolute; bottom: -100px; width: 50px; height: 70px;
@@ -39,13 +44,13 @@
         }
         @keyframes floatUp { to { transform: translateY(-120vh) rotate(360deg); } }
 
-        /* --- 4. الأزرار والعناصر (الطبقة رقم 10) --- */
+        /* --- حاوية الأزرار --- */
         .navigation-bar {
             position: absolute; bottom: 12%; width: 100%;
-            display: flex; justify-content: center; gap: 20px; 
-            z-index: 10; /* فوق كل شيء */
+            display: flex; justify-content: center; gap: 20px; z-index: 10;
         }
 
+        /* --- الأيقونات التفاعلية --- */
         .nav-item {
             width: 20vw; height: 20vw; max-width: 150px; max-height: 150px;
             border-radius: 40px; border: 6px solid white;
@@ -56,13 +61,18 @@
             outline: none; -webkit-tap-highlight-color: transparent;
         }
 
-        /* تأثير التفاعل (Hover/Focus) */
         .nav-item:hover, .nav-item:focus {
             transform: scale(1.2) rotate(5deg);
             border-color: #fffb00;
             box-shadow: 0 0 50px #fffb00;
             background: white;
             z-index: 20;
+            animation: wobble 0.5s infinite;
+        }
+        
+        @keyframes wobble {
+            0%, 100% { transform: rotate(5deg); }
+            50% { transform: rotate(-5deg); }
         }
 
         .purple { background: linear-gradient(135deg, #ab47bc, #7b1fa2); }
@@ -76,7 +86,7 @@
             text-shadow: 1px 1px 3px rgba(0,0,0,0.5); font-size: 1.2rem;
         }
 
-        /* --- 5. نافذة قريباً --- */
+        /* --- نافذة قريباً --- */
         #popup {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.8); z-index: 1000;
@@ -93,7 +103,7 @@
 </head>
 <body>
 
-    <img src="assets/bg-main.png" id="bg-image" alt="خلفية دينا">
+    <div id="bg-container"></div>
 
     <div id="balloon-container"></div>
 
@@ -143,7 +153,6 @@
         }
         window.onload = () => {
             createBalloons();
-            // التركيز على جزء عم
             if(document.querySelector('.green')) document.querySelector('.green').focus();
         };
     </script>
