@@ -3,136 +3,110 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تطبيق دينا للقرآن</title>
+    <title>تطبيق دينا</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@700;900&family=Lemonada:wght@600&display=swap" rel="stylesheet">
     <style>
-        /* --- 1. إعدادات الصفحة والخلفية الداكنة --- */
+        /* --- 1. إعدادات الأداء العالي --- */
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body, html {
             margin: 0; padding: 0; width: 100%; height: 100%;
             overflow: hidden; font-family: 'Cairo', sans-serif;
-            /* خلفية ليلية متدرجة مريحة للعين */
-            background: radial-gradient(circle at center, #2b32b2 0%, #141e30 100%);
+            background: radial-gradient(circle at center, #1e2544 0%, #0d121f 100%); /* خلفية ليلية خفيفة */
             color: #fff;
         }
 
-        /* --- 2. النجوم المتلألئة في الخلفية --- */
+        /* --- 2. النجوم (عدد أقل وأخف) --- */
         #stars-container {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 0;
         }
         .star {
-            position: absolute; background: white; border-radius: 50%;
-            box-shadow: 0 0 10px #fff; opacity: 0.8;
+            position: absolute; background: white; border-radius: 50%; opacity: 0.8;
+            /* حركة بسيطة جداً لا ترهق المعالج */
             animation: twinkle var(--duration) infinite alternate;
         }
-        @keyframes twinkle { from { opacity: 0.3; transform: scale(0.8); } to { opacity: 1; transform: scale(1.2); } }
+        @keyframes twinkle { from { opacity: 0.3; } to { opacity: 1; } }
 
-        /* --- 3. ركن دينا الترحيبي (الزاوية) --- */
+        /* --- 3. ركن الترحيب --- */
         .welcome-corner {
-            position: absolute; top: 30px; right: 30px;
+            position: absolute; top: 20px; right: 20px;
             display: flex; align-items: center; gap: 15px; z-index: 50;
-            animation: slideIn 1s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
-        @keyframes slideIn { from { transform: translateX(200px); } to { transform: translateX(0); } }
 
-        /* إطار الصورة الذهبي */
         .avatar-frame {
-            width: 100px; height: 100px; border-radius: 50%;
-            border: 4px solid #FFD700; padding: 3px;
-            background: rgba(255,255,255,0.2);
-            box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
-            overflow: hidden; position: relative;
+            width: 90px; height: 90px; border-radius: 50%;
+            border: 3px solid #FFD700; 
+            background: rgba(0,0,0,0.3);
+            overflow: hidden; 
         }
-        .avatar-frame img {
-            width: 100%; height: 100%; border-radius: 50%;
-            object-fit: cover;
-        }
+        .avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
 
-        /* فقاعة الكلام */
         .speech-bubble {
-            background: #fff; color: #333; padding: 15px 25px;
+            background: #fff; color: #333; padding: 10px 20px;
             border-radius: 20px; border-bottom-left-radius: 0;
             font-family: 'Lemonada', cursive; font-size: 0.9rem;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-            position: relative; max-width: 250px;
-            animation: floatBubble 3s infinite ease-in-out;
+            /* ظلال خفيفة للأداء */
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
         }
-        .speech-bubble::after {
-            content: ''; position: absolute; left: -10px; bottom: 0;
-            width: 0; height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid white;
-            border-top: 10px solid transparent;
-        }
-        @keyframes floatBubble { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        /* --- 4. الأزرار الزجاجية الاحترافية --- */
+        /* --- 4. الأزرار (سريعة الاستجابة) --- */
         .navigation-bar {
-            position: absolute; bottom: 12%; width: 100%;
-            display: flex; justify-content: center; gap: 30px; z-index: 10;
+            position: absolute; bottom: 15%; width: 100%;
+            display: flex; justify-content: center; gap: 20px; z-index: 10;
         }
 
         .nav-item {
-            width: 18vw; height: 18vw; max-width: 140px; max-height: 140px;
-            border-radius: 35px;
-            /* تصميم زجاجي (Glassmorphism) */
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.2);
+            width: 18vw; height: 18vw; max-width: 130px; max-height: 130px;
+            border-radius: 30px;
+            /* إزالة الـ Blur الثقيل واستخدام لون شفاف */
+            background: rgba(255, 255, 255, 0.1); 
+            border: 2px solid rgba(255, 255, 255, 0.3);
             display: flex; flex-direction: column; align-items: center; justify-content: center;
-            cursor: pointer; transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            position: relative; overflow: hidden;
+            cursor: pointer; 
+            transition: transform 0.2s ease-out; /* حركة سريعة جداً */
+            /* إجبار استخدام كرت الشاشة */
+            will-change: transform; 
         }
 
-        /* تأثير التوهج عند التمرير (Hover/Focus) */
+        /* تأثير التمرير (خفيف وسريع) */
         .nav-item:hover, .nav-item:focus {
-            transform: scale(1.2) translateY(-15px);
-            background: rgba(255, 255, 255, 0.25);
+            transform: scale(1.15); /* تكبير بسيط */
+            background: rgba(255, 255, 255, 0.2);
             border-color: #fff;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6), 0 0 30px var(--glow-color);
+            /* ظل واحد بسيط بدل الظلال المتعددة */
+            box-shadow: 0 0 20px var(--glow-color);
             z-index: 20;
         }
 
-        /* أيقونات مع ألوان خاصة للتوهج */
         .purple { --glow-color: #d500f9; }
         .green  { --glow-color: #00e676; }
         .yellow { --glow-color: #ffea00; }
         .orange { --glow-color: #ff3d00; }
 
-        .nav-icon { font-size: 3.5rem; filter: drop-shadow(0 0 5px rgba(255,255,255,0.5)); transition: 0.3s; }
-        .nav-text {
-            color: white; font-weight: 900; margin-top: 10px; font-size: 1.2rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
-        }
+        .nav-icon { font-size: 3rem; margin-bottom: 5px; }
+        .nav-text { color: white; font-weight: 700; font-size: 1.1rem; }
 
         /* --- 5. نافذة "قريباً" --- */
         #popup {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85); z-index: 1000;
+            background: rgba(0,0,0,0.8); z-index: 1000;
             display: none; justify-content: center; align-items: center;
-            backdrop-filter: blur(8px);
         }
         .popup-card {
-            background: #fff; color: #333; padding: 40px; border-radius: 40px;
-            text-align: center; border: 6px solid #FFD700;
-            animation: popIn 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            box-shadow: 0 0 60px #FFD700;
+            background: #fff; color: #333; padding: 30px; border-radius: 30px;
+            text-align: center; border: 5px solid #FFD700;
         }
-        @keyframes popIn { from { transform: scale(0); } to { transform: scale(1); } }
-        .popup-card h2 { font-size: 2rem; margin-top: 15px; font-family: 'Lemonada'; }
-
-        /* --- 6. البالونات المضيئة --- */
+        
+        /* --- 6. البالونات (خفيفة) --- */
         #balloon-container { position: fixed; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; z-index: 1; }
         .balloon {
-            position: absolute; bottom: -100px; width: 50px; height: 70px;
-            border-radius: 50%; opacity: 0.6;
+            position: absolute; bottom: -100px; width: 40px; height: 60px;
+            border-radius: 50%; opacity: 0.5;
             animation: floatUp var(--d) infinite linear;
             left: var(--x); background: var(--c);
-            box-shadow: inset -5px -5px 15px rgba(0,0,0,0.2), 0 0 15px var(--c);
         }
-        @keyframes floatUp { to { transform: translateY(-120vh) rotate(360deg); } }
+        @keyframes floatUp { to { transform: translateY(-120vh); } }
+
     </style>
 </head>
 <body>
@@ -142,8 +116,7 @@
 
     <div class="welcome-corner">
         <div class="speech-bubble">
-            مرحباً بكم في تطبيقي القرآن الكريم! <br> 
-            <span style="color:#e91e63; font-weight:bold;">— دينا 💖</span>
+            تطبيق دينا للقرآن الكريم 💖
         </div>
         <div class="avatar-frame">
             <img src="assets/images/girl.png" alt="دينا">
@@ -152,35 +125,38 @@
 
     <div id="popup" onclick="this.style.display='none'">
         <div class="popup-card">
-            <div style="font-size: 5rem;">✨🚧✨</div>
+            <div style="font-size: 4rem;">✨🚧✨</div>
             <h2>قريباً ياحلوتي دينا</h2>
         </div>
     </div>
 
     <div class="navigation-bar">
-        <div class="nav-item purple" tabindex="1" onclick="showMsg()">
+        <button class="nav-item purple" onclick="showMsg()" tabindex="1">
             <span class="nav-icon">🎙️</span>
             <span class="nav-text">تسجيلاتي</span>
-        </div>
-        <div class="nav-item green" tabindex="2" onclick="location.href='surah_list.html'">
+        </button>
+        
+        <button class="nav-item green" onclick="location.href='surah_list.html'" tabindex="2">
             <span class="nav-icon">📖</span>
             <span class="nav-text">جزء عم</span>
-        </div>
-        <div class="nav-item yellow" tabindex="3" onclick="showMsg()">
+        </button>
+        
+        <button class="nav-item yellow" onclick="showMsg()" tabindex="3">
             <span class="nav-icon">☀️</span>
             <span class="nav-text">أذكار</span>
-        </div>
-        <div class="nav-item orange" tabindex="4" onclick="showMsg()">
+        </button>
+        
+        <button class="nav-item orange" onclick="showMsg()" tabindex="4">
             <span class="nav-icon">🏆</span>
             <span class="nav-text">مكافآتي</span>
-        </div>
+        </button>
     </div>
 
     <script>
-        // إنشاء النجوم
+        // تقليل عدد النجوم إلى 30 لتحسين الأداء
         function createStars() {
             const container = document.getElementById('stars-container');
-            for(let i=0; i<60; i++) {
+            for(let i=0; i<30; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 const size = Math.random() * 3 + 'px';
@@ -192,11 +168,11 @@
             }
         }
 
-        // إنشاء البالونات
+        // تقليل عدد البالونات إلى 8 فقط
         function createBalloons() {
             const container = document.getElementById('balloon-container');
             const colors = ['#ff0055', '#00ff99', '#00ccff', '#ffcc00'];
-            for(let i=0; i<15; i++) {
+            for(let i=0; i<8; i++) {
                 const b = document.createElement('div');
                 b.className = 'balloon';
                 b.style.setProperty('--x', Math.random() * 95 + 'vw');
@@ -214,7 +190,7 @@
         window.onload = () => {
             createStars();
             createBalloons();
-            // تركيز تلقائي على زر "جزء عم" للتلفاز
+            // التركيز التلقائي
             document.querySelector('.green').focus();
         };
     </script>
